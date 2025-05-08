@@ -29,6 +29,32 @@ class User extends Authenticatable
         return $this->hasMany(Zone::class);
     }
 
+    function visitor(){
+        return $this->hasMany(Visitor::class);
+    }
+
+    function company(){
+        return $this->hasMany(Company::class);
+    }
+
+    function expense(){
+        return $this->hasMany(Expense::class);
+    }
+
+    function income(){
+        return $this->hasMany(Income::class);
+    }
+
+    function inventory(){
+        return $this->hasMany(Inventory::class);
+    }
+
+    function product(){
+        return $this->hasMany(Product::class);
+    }
+
+    
+
     /**
      * The attributes that should be hidden for serialization.
      *

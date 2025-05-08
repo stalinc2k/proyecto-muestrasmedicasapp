@@ -3,18 +3,17 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Zone;
+use App\Models\Visitor;
 use Illuminate\Http\Request;
 
-class ZoneController extends Controller
+class VisitorController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $zone = Zone::find(3);
-        dd($zone->user->name);
+        //
     }
 
     /**
@@ -22,7 +21,7 @@ class ZoneController extends Controller
      */
     public function create()
     {
-        return view('dashboard.zones.create');
+        //
     }
 
     /**
@@ -36,7 +35,7 @@ class ZoneController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Zone $zone)
+    public function show(Visitor $visitor)
     {
         //
     }
@@ -44,7 +43,7 @@ class ZoneController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Zone $zone)
+    public function edit(Visitor $visitor)
     {
         //
     }
@@ -52,7 +51,7 @@ class ZoneController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Zone $zone)
+    public function update(Request $request, Visitor $visitor)
     {
         //
     }
@@ -60,7 +59,7 @@ class ZoneController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Zone $zone)
+    public function destroy(Visitor $visitor)
     {
         //
     }
