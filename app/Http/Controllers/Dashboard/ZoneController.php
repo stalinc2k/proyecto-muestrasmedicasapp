@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Visitor;
 use App\Models\Zone;
 use Illuminate\Http\Request;
 
@@ -13,8 +14,10 @@ class ZoneController extends Controller
      */
     public function index()
     {
-        $zone = Zone::find(3);
-        dd($zone->user->name);
+        $zones = Zone::paginate(10);
+
+        return view('dashboard.zones.index',compact('zones'));
+        
     }
 
     /**
@@ -22,7 +25,8 @@ class ZoneController extends Controller
      */
     public function create()
     {
-        return view('dashboard.zones.create');
+        $visitors = Visitor::all();
+        return view('dashboard.zones.create',compact('visitors'));
     }
 
     /**
@@ -30,7 +34,20 @@ class ZoneController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->all();
+        $request->validate([
+            'code' => 'required|min:4|max:4|unique:zones',
+            'name' => 'required|min:10|max:150',
+            'visitor_id' => 'integer',
+        ]);
+        Zone::create([
+            'code' => strtoupper($request->code),
+            'name' => strtoupper($request->name),
+            'visitor_id' => intval($request->visitor_id),
+            'user_id' => 1,
+        ]);
+
+        return to_route('zone.index');
     }
 
     /**
@@ -46,7 +63,8 @@ class ZoneController extends Controller
      */
     public function edit(Zone $zone)
     {
-        //
+        $visitors = Visitor::all();
+        return view('dashboard.zones.edit', compact('zone','visitors'));
     }
 
     /**
@@ -54,7 +72,16 @@ class ZoneController extends Controller
      */
     public function update(Request $request, Zone $zone)
     {
-        //
+        $request->validate([
+            'name' => 'required|min:10|max:150',
+            'visitor_id' => 'integer'
+        ]);
+
+        $zone->update([
+            'name' => strtoupper($request->name),
+            'visitor_id' => intval($request->visitor_id)
+        ]);
+        return to_route('zone.index');
     }
 
     /**
@@ -62,6 +89,7 @@ class ZoneController extends Controller
      */
     public function destroy(Zone $zone)
     {
-        //
+        $zone->delete();
+        return to_route('zone.index');
     }
 }

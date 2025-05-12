@@ -22,7 +22,6 @@ class User extends Authenticatable
         'lastname',
         'email',
         'password',
-        'role'
     ];
 
     function zone(){
