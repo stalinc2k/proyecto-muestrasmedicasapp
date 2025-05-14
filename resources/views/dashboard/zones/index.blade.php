@@ -3,44 +3,69 @@
 @include('fragment._errors-form')
 
 @section('content')
-    <h1>Listado de zonas</h1>
-    <table border="1.5">
-        <thead>
+<div class="m-8 relative overflow-x-auto shadow-md sm:rounded-lg">
+
+    <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+        <x-modal-new-zone :visitors='$visitors'/>
+        <h3 class="text-3xl font-bold dark:text-white">Administración Zonas</h3>
+    </div>
+    
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <td>Codigo Zona</td>
-                <td>Descripcion</td>
-                <td>Visitador</td>
-                <td>Creado por</td>
-                <td>Operaciones</td>
+                
+                <th scope="col" class="px-6 py-3">
+                    Código
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Descripción
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Representante
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Creador Por:
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Accciones
+                </th>
             </tr>
         </thead>
         <tbody>
             @foreach ($zones as $zone)
-                <tr>
-                    <td>{{$zone->code}}</td>
-                    <td>{{$zone->name}}</td>
-                    <td>{{$zone->visitor->name ?? 'Sin Asignar'}}</td>
-                    <td>{{$zone->user->name}} {{$zone->user->lastname}}</td>
-                    <td>
-                        <form action="{{route('zone.edit', $zone)}}">
-                            <button type="submit">Editar</button>
-                        </form>
-                        
-                        <form action="{{route('zone.destroy', $zone)}}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">
-                                Eliminar
-                            </button>
-                        </form>
-                        
-                    </td>
-                </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                    <div class="ps-3">
+                        <div class="text-base font-semibold">{{$zone->code}}</div>
+                    </div>  
+                </th>
+                <td class="px-6 py-4">
+                    {{$zone->name}}
+                </td>
+                <td class="px-6 py-4">
+                    {{$zone->visitor->name ?? 'Sin Asignar'}}
+                </td>
+                <td class="px-6 py-4">
+                    {{$zone->user->name}} {{$zone->user->lastname}}
+                </td>
+                
+                <td class="px-6 py-4 justify-between">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Editar</a>
+                    <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline">Eliminar</a>
+                </td>
+            </tr>
             @endforeach
         </tbody>
     </table>
-    {{$zones->links()}}
-    <form action="{{route('zone.create')}}">
-        <button type="submit">Crear Zona</button>
-    </form>
+    <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+        <div class="mt-3">
+            {{$zones->links()}}
+        </div>
+        
+    </div>
+</div>
+
+
+
+
 @endsection

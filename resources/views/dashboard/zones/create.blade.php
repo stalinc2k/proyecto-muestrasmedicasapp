@@ -22,6 +22,7 @@
             <div>
                 <label for="visitor_id">
                     <select name="visitor_id" id="">
+                        <option value="0">Sin asignar</option>
                         @foreach ($visitors as $visitor)
                             <option value="{{$visitor->id}}" {{old('visitor_id')== $visitor->id ? 'selected':''}}>{{$visitor->code}} - {{$visitor->name}}</option>
                         @endforeach

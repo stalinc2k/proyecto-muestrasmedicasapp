@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Visitor;
 use App\Models\Zone;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\Null_;
 
 class ZoneController extends Controller
 {
@@ -15,8 +16,8 @@ class ZoneController extends Controller
     public function index()
     {
         $zones = Zone::paginate(10);
-
-        return view('dashboard.zones.index',compact('zones'));
+        $visitors = Visitor::all();
+        return view('dashboard.zones.index',compact('zones','visitors'));
         
     }
 
@@ -37,13 +38,13 @@ class ZoneController extends Controller
         $request->all();
         $request->validate([
             'code' => 'required|min:4|max:4|unique:zones',
-            'name' => 'required|min:10|max:150',
+            'name' => 'required|min:4|max:150',
             'visitor_id' => 'integer',
         ]);
         Zone::create([
             'code' => strtoupper($request->code),
             'name' => strtoupper($request->name),
-            'visitor_id' => intval($request->visitor_id),
+            'visitor_id' => intval($request->visitor_id)==0?Null:intval($request->visitor_id),
             'user_id' => 1,
         ]);
 
@@ -73,7 +74,7 @@ class ZoneController extends Controller
     public function update(Request $request, Zone $zone)
     {
         $request->validate([
-            'name' => 'required|min:10|max:150',
+            'name' => 'required|min:4|max:150',
             'visitor_id' => 'integer'
         ]);
 
