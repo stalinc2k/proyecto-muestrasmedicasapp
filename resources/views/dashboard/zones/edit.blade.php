@@ -29,15 +29,15 @@
                             <option value="{{$zone->visitor_id}}" {{old('visitor_id')== $zone->visitor_id ? 'selected':''}}>
                                 {{$zone->visitor->code}} - {{$zone->visitor->name}}
                             </option>
+                            @foreach ($visitors as $visitor)
+                                @if ($zone->visitor_id != $visitor->id)
+                                    <option value="{{$visitor->id}}">
+                                        {{$visitor->code}} - {{$visitor->name}}
+                                    </option>
+                                @endif
+                            @endforeach
+                            <option value="" selected>Sin asignar</option>      
                         @endif
-
-                        @foreach ($visitors as $visitor)
-                            @if ($zone->visitor_id != $visitor->id)
-                                <option value="{{$visitor->id}}">
-                                    {{$visitor->code}} - {{$visitor->name}}
-                                </option>
-                            @endif
-                        @endforeach
                     </select>
                 </label>
             </div>

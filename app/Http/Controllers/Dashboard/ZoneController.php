@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Visitor;
 use App\Models\Zone;
 use Illuminate\Http\Request;
-use phpDocumentor\Reflection\Types\Null_;
+use Illuminate\Support\Facades\Validator;
 
 class ZoneController extends Controller
 {
@@ -15,8 +15,8 @@ class ZoneController extends Controller
      */
     public function index()
     {
-        $zones = Zone::paginate(10);
-        $visitors = Visitor::all();
+        $zones = Zone::orderBy('code', 'asc')->paginate(7);
+        $visitors = Visitor::orderBy('code', 'asc')->get();
         return view('dashboard.zones.index',compact('zones','visitors'));
         
     }
@@ -73,24 +73,40 @@ class ZoneController extends Controller
      */
     public function update(Request $request, Zone $zone)
     {
-        $request->validate([
-            'name' => 'required|min:4|max:150',
-            'visitor_id' => 'integer'
-        ]);
+        $page = $request->input('page', 1);
 
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:4|max:150',
+            'visitor_id' => 'integer',
+        ]);
+    
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('editing_zone_id', $zone->id);
+        }
+    
         $zone->update([
             'name' => strtoupper($request->name),
-            'visitor_id' => intval($request->visitor_id)
+            'visitor_id' => intval($request->visitor_id),
         ]);
-        return to_route('zone.index');
+    
+        return redirect()
+            ->route('zone.index', ['page' => $page])
+            ->with('success', 'Zona actualizada correctamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Zone $zone)
+    public function destroy(Request $request, Zone $zone)
     {
+        $page = $request->input('page',1);
         $zone->delete();
-        return to_route('zone.index');
+        return redirect()
+        ->route('zone.index',['page' => $page])
+        ->with('success', 'Zona eliminada correctamente.');
     }
 }

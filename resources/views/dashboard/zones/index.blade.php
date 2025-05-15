@@ -1,12 +1,10 @@
 @extends('dashboard.master')
-
-@include('fragment._errors-form')
-
 @section('content')
 <div class="m-8 relative overflow-x-auto shadow-md sm:rounded-lg">
 
     <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
         <x-modal-new-zone :visitors='$visitors'/>
+        
         <h3 class="text-3xl font-bold dark:text-white">Administración Zonas</h3>
     </div>
     
@@ -49,9 +47,10 @@
                     {{$zone->user->name}} {{$zone->user->lastname}}
                 </td>
                 
-                <td class="px-6 py-4 justify-between">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Editar</a>
-                    <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline">Eliminar</a>
+                <td class="px-2 py-2 justify-between">
+                    <x-modal-edit-zone :zoneId="$zone->id" :zone="$zone" :visitors="$visitors" />
+                    <x-errormodal-open-zone />
+                    <x-modal-delete-zone :zoneId="$zone->id" :zone="$zone"/>
                 </td>
             </tr>
             @endforeach
