@@ -7,9 +7,6 @@
         </svg>
     </button>
     <div id="zonaModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
-        
-
-
         <div class="bg-white p-6 rounded-xl shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">Nueva Zona</h2>
             @include('fragment._errors-form')

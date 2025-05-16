@@ -5,16 +5,16 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Visitor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class VisitorController extends Controller
 {
 
     public function index()
     {
-        //$visitors = Visitor::whereNull('deleted_at')->paginate(7);
-        $visitors = Visitor::paginate(7);
-        $visitorsDeleted = Visitor::onlyTrashed()->get();
-        return view('dashboard.visitors.index', compact('visitors','visitorsDeleted'));
+        $visitors = Visitor::orderBy('code', 'asc')->paginate(7);
+        return view('dashboard.visitors.index', compact('visitors'));
     }
 
     /**
@@ -35,7 +35,7 @@ class VisitorController extends Controller
         $request->validate(
             [
              'code' => 'required|min:5|max:5|unique:visitors',
-             'name' => 'required|max:150',
+             'name' => 'required|min:5|max:150',
             ]
         );
 
@@ -45,7 +45,7 @@ class VisitorController extends Controller
                 'name' => strtoupper($request->name),
                 'email' => $request->email,
                 'phone' => $request->phone,
-                'user_id' => 1,
+                'user_id' => Auth::id(),
             ]
         );
 
@@ -73,26 +73,41 @@ class VisitorController extends Controller
      */
     public function update(Request $request, Visitor $visitor)
     {
-        $request->validate([
-            'name' => 'required|min:10|max:150',
+        $page = $request->input('page', 1);
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:5|max:150',
+            'active' => 'integer'
         ]);
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('editing_visitor_id', $visitor->id);
+        }
+
         $visitador = Visitor::find($visitor->id);
         $visitador->name = strtoupper($request->name);
         $visitador->email = $request->email;
         $visitador->phone = $request->phone;
-        $visitador->active = $request->active;
+        $visitador->active = intval($request->active);
         $visitador->save();
 
-        return redirect()->route('visitor.index')->with('success', 'Visitador actualizado');
+        return redirect()
+            ->route('visitor.index', ['page' => $page])
+            ->with('success', 'Representante actualizado correctamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Visitor $visitor)
+    public function destroy(Request $request, Visitor $visitor)
     {
-        $visitador = Visitor::find($visitor->id);
-        $visitador->delete();
-        return redirect()->route('visitor.index')->with('success', 'Visitador eliminado');
+        $page = $request->input('page', 1);
+        $visitor->delete();
+        return redirect()
+            ->route('visitor.index', ['page' => $page])
+            ->with('success', 'Representante eliminado');
     }
 }

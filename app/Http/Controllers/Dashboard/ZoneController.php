@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Visitor;
 use App\Models\Zone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ZoneController extends Controller
@@ -44,8 +45,8 @@ class ZoneController extends Controller
         Zone::create([
             'code' => strtoupper($request->code),
             'name' => strtoupper($request->name),
-            'visitor_id' => intval($request->visitor_id)==0?Null:intval($request->visitor_id),
-            'user_id' => 1,
+            'visitor_id' => intval($request->visitor_id),
+            'user_id' => Auth::id(),
         ]);
 
         return to_route('zone.index');
