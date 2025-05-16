@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\CompanyController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\VisitorController;
 use App\Http\Controllers\Dashboard\ZoneController;
@@ -21,10 +22,12 @@ Route::middleware(['auth'])->group(function () {
    
 });
 
-Route::middleware(['auth', 'admin'])->prefix('dashboard')->group(function () {
+Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::resource('visitor', VisitorController::class);
     Route::resource('zone', ZoneController::class);
+    Route::resource('company', CompanyController::class);
     Route::resource('product', ProductController::class);
+    Route::get('/listzone', [ZoneController::class, 'zonePdf'])->name('listado.zonas');
 });
 
 require __DIR__.'/auth.php';

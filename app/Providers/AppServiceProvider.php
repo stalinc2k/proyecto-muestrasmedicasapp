@@ -8,9 +8,10 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
+    protected $policies = [
+        \App\Models\Zone::class => \App\Policies\ZonePolicy::class,
+    ];
+
     public function register(): void
     {
         //

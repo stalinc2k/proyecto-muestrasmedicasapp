@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Visitor;
 use App\Models\Zone;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -14,6 +16,8 @@ class ZoneController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use AuthorizesRequests;
+
     public function index()
     {
         $zones = Zone::orderBy('code', 'asc')->paginate(7);
@@ -28,6 +32,7 @@ class ZoneController extends Controller
     public function create()
     {
         $visitors = Visitor::all();
+        $this->authorize('create', Zone::class);
         return view('dashboard.zones.create',compact('visitors'));
     }
 
@@ -36,6 +41,7 @@ class ZoneController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Zone::class);
         $request->all();
         $request->validate([
             'code' => 'required|min:4|max:4|unique:zones',
@@ -52,9 +58,15 @@ class ZoneController extends Controller
         return to_route('zone.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
+    public function zonePdf(){
+
+        $zones = Zone::orderBy('code', 'asc')->get();
+        $pdf = Pdf::loadView('dashboard.zones.listpdf', compact('zones'));
+        return $pdf->stream('list_zones.pdf');
+
+    }
+
+
     public function show(Zone $zone)
     {
         //
@@ -65,6 +77,7 @@ class ZoneController extends Controller
      */
     public function edit(Zone $zone)
     {
+        $this->authorize('update', $zone);
         $visitors = Visitor::all();
         return view('dashboard.zones.edit', compact('zone','visitors'));
     }
@@ -74,6 +87,7 @@ class ZoneController extends Controller
      */
     public function update(Request $request, Zone $zone)
     {
+        $this->authorize('update', $zone);
         $page = $request->input('page', 1);
 
         $validator = Validator::make($request->all(), [
@@ -104,6 +118,7 @@ class ZoneController extends Controller
      */
     public function destroy(Request $request, Zone $zone)
     {
+        $this->authorize('delete', $zone);
         $page = $request->input('page',1);
         $zone->delete();
         return redirect()

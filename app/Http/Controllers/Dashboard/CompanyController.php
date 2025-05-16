@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class CompanyController extends Controller
 {
@@ -13,7 +15,8 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
+        $companies = Company::orderBy('code', 'asc')->paginate(7);
+        return view('dashboard.companies.index', compact('companies'));
     }
 
     /**
@@ -29,7 +32,28 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->all();
+
+        $request->validate(
+            [
+             'code' => 'required|min:11|max:14|unique:companies',
+             'ruc' => 'required|min:10|max:13',
+             'name' => 'required|min:5|max:150',
+            ]
+        );
+
+        Company::create(
+            [
+                'code' => strtoupper($request->code),
+                'ruc' => $request->ruc,
+                'name' => strtoupper($request->name),
+                'address' => strtoupper($request->address),
+                'phone' => $request->phone,
+                'user_id' => Auth::id(),
+            ]
+        );
+
+        return redirect()->route('company.index')->with('success', 'Empresa creada correctamente');
     }
 
     /**
@@ -53,14 +77,44 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-        //
+        $page = $request->input('page', 1);
+
+        $validator = Validator::make($request->all(), [
+            'ruc' => 'required|min:10|max:13',
+            'name' => 'required|min:5|max:150',
+        ]);
+    
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('editing_company_id', $company->id);
+        }
+        
+        $company->update([
+            'ruc' => $request->ruc,
+            'name' => strtoupper($request->name),
+            'address' => strtoupper($request->address),
+            'phone' => $request->phone,
+            'type' => $request->type
+        ]);
+        return redirect()
+            ->route('company.index', ['page' => $page])
+            ->with('success', 'Empresa actualizada correctamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Company $company)
+    public function destroy(Request $request, Company $company)
     {
-        //
+        $page = $request->input('page', 1);
+
+        $company->delete();
+       
+        return redirect()
+            ->route('company.index', ['page' => $page])
+            ->with('success', 'Empresa actualizada correctamente.');
     }
 }
