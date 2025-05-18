@@ -29,7 +29,8 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::resource('product', ProductController::class);
     Route::get('/listzone', [ZoneController::class, 'zonePdf'])->name('listado.zonas');
     Route::get('/listvisitor', [VisitorController::class, 'visitorPdf'])->name('listado.visitadores');
-    Route::get('/listempresas', [CompanyController::class, 'companyPdf'])->name('listado.empresas');
+    Route::get('/listcompany', [CompanyController::class, 'companyPdf'])->name('listado.empresas');
+    Route::get('/listproduct', [ProductController::class, 'productPdf'])->name('listado.productos');
 });
 
 require __DIR__.'/auth.php';

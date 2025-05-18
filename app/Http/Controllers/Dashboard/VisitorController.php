@@ -42,6 +42,7 @@ class VisitorController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Visitor::class);
         $request->all();
 
         $request->validate(
@@ -85,6 +86,7 @@ class VisitorController extends Controller
      */
     public function update(Request $request, Visitor $visitor)
     {
+        $this->authorize('update', $visitor);
         $page = $request->input('page', 1);
 
         $validator = Validator::make($request->all(), [
@@ -116,6 +118,7 @@ class VisitorController extends Controller
      */
     public function destroy(Request $request, Visitor $visitor)
     {
+        $this->authorize('delete', $visitor);
         $page = $request->input('page', 1);
         $visitor->delete();
         return redirect()

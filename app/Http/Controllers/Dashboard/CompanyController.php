@@ -44,6 +44,7 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Company::class);
         $request->all();
 
         $request->validate(
@@ -89,6 +90,7 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
+        $this->authorize('update', $company);
         $page = $request->input('page', 1);
 
         $validator = Validator::make($request->all(), [
@@ -121,6 +123,7 @@ class CompanyController extends Controller
      */
     public function destroy(Request $request, Company $company)
     {
+        $this->authorize('delete', $company);
         $page = $request->input('page', 1);
 
         $company->delete();
