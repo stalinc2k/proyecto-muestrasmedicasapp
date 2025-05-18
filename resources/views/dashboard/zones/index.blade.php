@@ -55,6 +55,7 @@
                         <x-zonecomponents.modal-edit-zone :zoneId="$zone->id" :zone="$zone" :visitors="$visitors" />
                     @endcan
                     <x-zonecomponents.errormodal-open-zone />
+                    <x-scriptcomponent />
                     @can('delete', $zone)
                         <x-zonecomponents.modal-delete-zone :zoneId="$zone->id" :zone="$zone"/>        
                     @endcan

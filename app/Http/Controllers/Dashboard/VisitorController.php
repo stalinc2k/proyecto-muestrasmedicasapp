@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Visitor;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -11,10 +13,20 @@ use Illuminate\Support\Facades\Validator;
 class VisitorController extends Controller
 {
 
+    use AuthorizesRequests;
+
     public function index()
     {
         $visitors = Visitor::orderBy('code', 'asc')->paginate(7);
         return view('dashboard.visitors.index', compact('visitors'));
+    }
+
+    public function visitorPdf(){
+
+        $visitors = visitor::with('zone')->orderBy('code', 'asc')->get();
+        $pdf = Pdf::loadView('dashboard.visitors.listpdf', compact('visitors'));
+        return $pdf->stream('list_visitors.pdf');
+
     }
 
     /**

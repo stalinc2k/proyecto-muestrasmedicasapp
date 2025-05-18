@@ -21,7 +21,7 @@ class ZoneController extends Controller
     public function index()
     {
         $zones = Zone::orderBy('code', 'asc')->paginate(7);
-        $visitors = Visitor::orderBy('code', 'asc')->get();
+        $visitors = Visitor::where('active', true)->orderBy('code', 'asc')->get();
         return view('dashboard.zones.index',compact('zones','visitors'));
         
     }
@@ -31,7 +31,7 @@ class ZoneController extends Controller
      */
     public function create()
     {
-        $visitors = Visitor::all();
+        $visitors = Visitor::where('active', true)->orderBy('code', 'asc');
         $this->authorize('create', Zone::class);
         return view('dashboard.zones.create',compact('visitors'));
     }

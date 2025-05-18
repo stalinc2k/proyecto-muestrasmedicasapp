@@ -4,7 +4,10 @@
 
 <div class="m-8 relative overflow-x-auto shadow-md sm:rounded-lg">
     <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
-        <x-companycomponents.modal-new-company />
+        @can('create', App\Models\Company::class)
+            <x-companycomponents.modal-new-company />
+        @endcan
+        <x-companycomponents.listpdf-company />
         <h3 class="text-3xl font-bold dark:text-white">Administración Empresas</h3>
     </div>
     
@@ -65,10 +68,16 @@
                     <div class="font-normal text-gray-500">{{$company->created_at}}</div>
                 </td>
                 <td class="px-2 py-2 justify-between">
-                    <x-companycomponents.modal-edit-company :companyId="$company->id" :company="$company" />
-                    <x-companycomponents.errormodal-open-company />
-                    <x-companycomponents.modal-delete-company :companyId="$company->id" :company="$company" />
+                    @can('update', $company)
+                        <x-companycomponents.modal-edit-company :companyId="$company->id" :company="$company" />    
+                    @endcan
                     
+                    <x-companycomponents.errormodal-open-company />
+                    <x-scriptcomponent />
+                    
+                    @can('delete', $company)
+                        <x-companycomponents.modal-delete-company :companyId="$company->id" :company="$company" />
+                    @endcan
                 </td>
             </tr>
             @endforeach

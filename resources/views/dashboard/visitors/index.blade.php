@@ -4,7 +4,10 @@
 
 <div class="m-8 relative overflow-x-auto shadow-md sm:rounded-lg">
     <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
-        <x-visitorcomponents.modal-new-visitor />
+        @can('create', App\Models\Visitor::class)
+            <x-visitorcomponents.modal-new-visitor />    
+        @endcan
+        <x-visitorcomponents.listpdf-visitor /> 
         <h3 class="text-3xl font-bold dark:text-white">Administración Representantes</h3>
     </div>
     
@@ -68,9 +71,14 @@
                     <div class="font-normal text-gray-500">{{$visitor->created_at}}</div>
                 </td>
                 <td class="px-2 py-2 justify-between">
-                    <x-visitorcomponents.modal-edit-visitor :visitorId="$visitor->id" :visitor="$visitor" />
+                    @can('update', $visitor)
+                        <x-visitorcomponents.modal-edit-visitor :visitorId="$visitor->id" :visitor="$visitor" />
+                    @endcan
                     <x-visitorcomponents.errormodal-open-visitor />
-                    <x-visitorcomponents.modal-delete-visitor :visitorId="$visitor->id" :visitor="$visitor"/>
+                    <x-scriptcomponent />
+                    @can('delete', $visitor)
+                        <x-visitorcomponents.modal-delete-visitor :visitorId="$visitor->id" :visitor="$visitor"/>    
+                    @endcan
                 </td>
             </tr>
             @endforeach

@@ -5,6 +5,7 @@
             const modal = document.getElementById(modalId);
             if (modal) {
                 modal.classList.remove('hidden');
+                modal.classList.add('flex');
             }
         });
     </script>
@@ -17,7 +18,15 @@
             const modal = document.getElementById(modalId);
             if (modal) {
                 modal.classList.remove('hidden');
+                modal.classList.add('flex');
             }
         });
     </script>
 @endif
+<script>
+    function abrirModalPDF() {
+        document.getElementById('iframePDF').src = '{{ route('listado.visitadores') }}';
+        document.getElementById('modalPDF').classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+</script>

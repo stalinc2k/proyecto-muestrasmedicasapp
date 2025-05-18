@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -13,10 +15,20 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use AuthorizesRequests;
+
     public function index()
     {
         $companies = Company::orderBy('code', 'asc')->paginate(7);
         return view('dashboard.companies.index', compact('companies'));
+    }
+
+    public function companyPdf(){
+
+        $companies = Company::orderBy('code', 'asc')->get();
+        $pdf = Pdf::loadView('dashboard.companies.listpdf', compact('companies'));
+        return $pdf->stream('list_company.pdf');
+
     }
 
     /**

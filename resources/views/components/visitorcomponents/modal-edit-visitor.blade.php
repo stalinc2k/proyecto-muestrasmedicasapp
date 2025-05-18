@@ -1,8 +1,9 @@
 
 @props(['visitorId','visitor'])
 
-    <a onclick="document.getElementById('visitorModalEdit-{{$visitorId}}').classList.remove('hidden')" class=" cursor-pointer text-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-sm rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">Editar</a>
-    <div id="visitorModalEdit-{{$visitorId}}" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
+    <a onclick="mostrarModal('visitorModalEdit-{{$visitorId}}')" 
+            class="text-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-sm rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500 cursor-pointer">Editar</a>
+    <div id="visitorModalEdit-{{$visitorId}}" class="fixed inset-0 bg-gray-900 bg-opacity-50 items-center justify-center hidden z-50">
         <div class="bg-white p-6 rounded-xl shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">Editar Representante</h2>
             @include('fragment._errors-form')
@@ -63,7 +64,7 @@
                 </div>
                 <div class="flex justify-end gap-2">
                     <input type="hidden" name="page" value="{{ request('page', 1) }}">
-                    <a href="" class="bg-orange-500 text-white px-4 py-2 rounded">Cancelar</a>
+                    <a onclick="cerrarModal('visitorModalEdit-{{$visitorId}}')" class="bg-orange-500 text-white px-4 py-2 rounded cursor-pointer">Cancelar</a>
                     </button>
                     <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Guardar</button>
                 </div>

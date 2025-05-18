@@ -28,6 +28,8 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::resource('company', CompanyController::class);
     Route::resource('product', ProductController::class);
     Route::get('/listzone', [ZoneController::class, 'zonePdf'])->name('listado.zonas');
+    Route::get('/listvisitor', [VisitorController::class, 'visitorPdf'])->name('listado.visitadores');
+    Route::get('/listempresas', [CompanyController::class, 'companyPdf'])->name('listado.empresas');
 });
 
 require __DIR__.'/auth.php';
