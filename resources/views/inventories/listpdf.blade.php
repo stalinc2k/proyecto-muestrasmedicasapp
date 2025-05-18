@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Listado de Productos</title>
+    <title>Kardex</title>
     <style>
       body {
             font-family: DejaVu Sans, sans-serif;
@@ -39,27 +39,37 @@
         <img class="nombre" src="{{ public_path('img/logos/logo_nombre.jpeg') }}" alt="">
     </div>
     <h2>
-        LISTADO DE PPRODUCTOS
+        LISTADO DE ZONA CON SUS REPRESENTANTES
     </h2>
     <table>
         <thead>
             <tr>
-                <th>Codigo</th>
-                <th>Descripción</th>
-                <th>Código de barras</th>
-                <th>Imagen</th>
+                <th>FECHA</th>
+                <th>NUM MOVIMIENTO</th>
+                <th>PRODUCTO</th>
+                <th>CANTIDAD</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($products as $product)
+            @foreach ($inventories as $inventory)
                 <tr>
-                    <td>{{ $product->code}}
-                        {{ $product->company->name}}
+                    <div class="text-base font-semibold">
+                        {{$inventory->dateinventory}}
+                        <div class="font-normal text-gray-500">
+                            {{$inventory->income_id ? 'Entrada': 'Salida'}}
+                        </div>
+                    </div>
+                    <td class="px-6 py-4">
+                    {{$inventory->income_id ?? $inventory->expense_id}}
                     </td>
-                    <td>{{ $product->description}}</td>
-                    <td>{{ $product->barcode??'0000000000'}}</td>
-                    <td>
-                        <img src="{{public_path($product->image)}}" class="logo" alt="">
+                    <td class="px-6 py-4">
+                        <div class="font-normal text-gray-500">
+                            {{$inventory->product->code}}
+                        </div>
+                        {{$inventory->product->description}}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{$inventory->cantinventory}}
                     </td>
                 </tr>
             @endforeach

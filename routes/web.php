@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\Dashboard\CompanyController;
+use App\Http\Controllers\Dashboard\InventoryController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\VisitorController;
 use App\Http\Controllers\Dashboard\ZoneController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Inventory;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -15,6 +17,11 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/inventory', function () {
+    return view('inventory');
+})->middleware(['auth', 'verified'])->name('inventory');
+
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -22,15 +29,23 @@ Route::middleware(['auth'])->group(function () {
    
 });
 
+Route::middleware(['auth'])->prefix('inventories')->group(function () {
+    Route::get('/listkardex', [InventoryController::class, 'inventoryPdf'])->name('kardex.general');
+});
+
+
 Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::resource('visitor', VisitorController::class);
     Route::resource('zone', ZoneController::class);
     Route::resource('company', CompanyController::class);
     Route::resource('product', ProductController::class);
+    Route::resource('inventory', InventoryController::class);
     Route::get('/listzone', [ZoneController::class, 'zonePdf'])->name('listado.zonas');
     Route::get('/listvisitor', [VisitorController::class, 'visitorPdf'])->name('listado.visitadores');
     Route::get('/listcompany', [CompanyController::class, 'companyPdf'])->name('listado.empresas');
     Route::get('/listproduct', [ProductController::class, 'productPdf'])->name('listado.productos');
+    Route::get('/listproduct', [ProductController::class, 'productPdf'])->name('listado.productos');
+    
 });
 
 require __DIR__.'/auth.php';

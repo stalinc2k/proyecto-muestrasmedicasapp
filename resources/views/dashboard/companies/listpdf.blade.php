@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Listado de Zonas</title>
+    <title>Listado de Empresas</title>
     <style>
       body {
             font-family: DejaVu Sans, sans-serif;

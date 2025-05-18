@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Inventory;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 
 class InventoryController extends Controller
@@ -11,9 +13,19 @@ class InventoryController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use SoftDeletes;
     public function index()
     {
-        //
+        $inventories = Inventory::orderBy('dateinventory','asc') ->paginate(7);
+        return view('inventories.index', compact('inventories'));
+    }
+
+     public function inventoryPdf(){
+
+        $inventories = Inventory::orderBy('dateinventory', 'asc')->get();
+        $pdf = Pdf::loadView('inventories.listpdf', compact('inventories'));
+        return $pdf->stream('list_inventory.pdf');
+
     }
 
     /**
