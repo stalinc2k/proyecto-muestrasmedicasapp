@@ -1,11 +1,15 @@
 <?php
 
 use App\Http\Controllers\Dashboard\CompanyController;
+use App\Http\Controllers\Dashboard\ExpenseController;
+use App\Http\Controllers\Dashboard\IncomeController;
 use App\Http\Controllers\Dashboard\InventoryController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\VisitorController;
 use App\Http\Controllers\Dashboard\ZoneController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Expense;
+use App\Models\Income;
 use App\Models\Inventory;
 use Illuminate\Support\Facades\Route;
 
@@ -31,7 +35,13 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->prefix('inventories')->group(function () {
     Route::get('/listkardex', [InventoryController::class, 'inventoryPdf'])->name('kardex.general');
+   
+
 });
+
+Route::get('/productos/{company}', [IncomeController::class, 'getProducts'])->middleware('auth');
+Route::get('/inventories/stock/{product}', [InventoryController::class, 'getStock'])->middleware('auth');
+
 
 
 Route::middleware(['auth'])->prefix('dashboard')->group(function () {
@@ -40,10 +50,11 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::resource('company', CompanyController::class);
     Route::resource('product', ProductController::class);
     Route::resource('inventory', InventoryController::class);
+    Route::resource('income', IncomeController::class);
+    Route::resource('expense', ExpenseController::class);
     Route::get('/listzone', [ZoneController::class, 'zonePdf'])->name('listado.zonas');
     Route::get('/listvisitor', [VisitorController::class, 'visitorPdf'])->name('listado.visitadores');
     Route::get('/listcompany', [CompanyController::class, 'companyPdf'])->name('listado.empresas');
-    Route::get('/listproduct', [ProductController::class, 'productPdf'])->name('listado.productos');
     Route::get('/listproduct', [ProductController::class, 'productPdf'])->name('listado.productos');
     
 });

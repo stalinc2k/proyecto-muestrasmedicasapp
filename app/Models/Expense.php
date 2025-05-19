@@ -21,4 +21,8 @@ class Expense extends Model
     public function visitor(){
         return $this->belongsTo(Visitor::class);
     }
+
+    public function inventory(){
+        return $this->hasMany(Inventory::class);
+    }
 }

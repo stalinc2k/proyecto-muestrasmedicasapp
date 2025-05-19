@@ -62,8 +62,8 @@
                     <td>{{ $visitor->active }}</td>
                     <td>
                         @foreach ($visitor->zone as $zona)
-                            {{ $zona->code}}
-                            {{ $zona->name}}   
+                                {{ $zona->code}}
+                                {{ $zona->name}}<br>   
                         @endforeach
                     </td>
                 </tr>

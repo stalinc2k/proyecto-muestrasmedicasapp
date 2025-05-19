@@ -4,7 +4,12 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Expense;
+use App\Models\Inventory;
+use App\Models\Product;
+use App\Models\Visitor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ExpenseController extends Controller
 {
@@ -21,7 +26,9 @@ class ExpenseController extends Controller
      */
     public function create()
     {
-        //
+        $visitors = Visitor::orderBy('code', 'asc')->get();
+        $products = Product::orderBy('code', 'asc')->get();
+        return view('expenses.create',compact('visitors','products'));
     }
 
     /**
@@ -29,8 +36,53 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'visitor_id' => 'required|exists:visitors,id',
+            'deliverydate' => 'required|date',
+            'productos' => 'required|array|min:1',
+            'productos.*.product_id' => 'required|exists:products,id',
+            'productos.*.cantinventory' => 'required|integer|min:1',
+        ]);
+    
+        DB::beginTransaction();
+    
+        try {
+            $total = collect($request->productos)->sum('cantinventory');
+    
+            $expense = Expense::create([
+                'user_id' => Auth::id(),
+                'visitor_id' => $request->visitor_id,
+                'deliverydate' => $request->deliverydate,
+                'totalunits' => $total,
+                'observations' => $request->observations,
+            ]);
+    
+            foreach ($request->productos as $item) {
+                $stock = Inventory::where('product_id', $item['product_id'])->whereNotNull('income_id')->sum('cantinventory') -
+                         Inventory::where('product_id', $item['product_id'])->whereNotNull('expense_id')->sum('cantinventory');
+    
+                if ($item['cantinventory'] > $stock) {
+                    throw new \Exception("Stock insuficiente para el producto ID {$item['product_id']}");
+                }
+    
+                Inventory::create([
+                    'user_id' => Auth::id(),
+                    'product_id' => $item['product_id'],
+                    'expense_id' => $expense->id,
+                    'dateinventory' => $request->deliverydate,
+                    'cantinventory' => $item['cantinventory'],
+                ]);
+            }
+    
+            DB::commit();
+            return redirect()->route('expenses.index')->with('success', 'Salida registrada correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Error: ' . $e->getMessage());
+        }
     }
+    
 
     /**
      * Display the specified resource.

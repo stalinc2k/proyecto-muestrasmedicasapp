@@ -71,10 +71,6 @@
                     @can('update', $company)
                         <x-companycomponents.modal-edit-company :companyId="$company->id" :company="$company" />    
                     @endcan
-                    
-                    <x-companycomponents.errormodal-open-company />
-                    <x-scriptcomponent />
-                    
                     @can('delete', $company)
                         <x-companycomponents.modal-delete-company :companyId="$company->id" :company="$company" />
                     @endcan
@@ -89,5 +85,5 @@
         </div>
     </div>
 </div>
-
+<x-companycomponents.errormodal-open-company />
 @endsection

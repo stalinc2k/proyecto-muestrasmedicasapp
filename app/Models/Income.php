@@ -21,4 +21,8 @@ class Income extends Model
     public function company(){
         return $this->belongsTo(Company::class);
     }
+
+    public function inventory(){
+        return $this->hasMany(Inventory::class);
+    }
 }

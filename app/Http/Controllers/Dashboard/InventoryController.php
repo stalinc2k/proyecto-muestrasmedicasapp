@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Inventory;
+use App\Models\Product;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class InventoryController extends Controller
     use SoftDeletes;
     public function index()
     {
-        $inventories = Inventory::orderBy('dateinventory','asc') ->paginate(7);
+        $inventories = Inventory::groupBy('id')->paginate(7);
         return view('inventories.index', compact('inventories'));
     }
 
@@ -28,6 +29,13 @@ class InventoryController extends Controller
 
     }
 
+    public function getStock(Product $product)
+    {
+        $entradas = Inventory::where('product_id', $product->id)->whereNotNull('income_id')->sum('cantinventory');
+        $salidas = Inventory::where('product_id', $product->id)->whereNotNull('expense_id')->sum('cantinventory');
+
+        return response()->json(['stock' => $entradas - $salidas]);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -41,7 +49,6 @@ class InventoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**

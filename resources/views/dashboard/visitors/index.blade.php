@@ -74,8 +74,7 @@
                     @can('update', $visitor)
                         <x-visitorcomponents.modal-edit-visitor :visitorId="$visitor->id" :visitor="$visitor" />
                     @endcan
-                    <x-visitorcomponents.errormodal-open-visitor />
-                    <x-scriptcomponent />
+
                     @can('delete', $visitor)
                         <x-visitorcomponents.modal-delete-visitor :visitorId="$visitor->id" :visitor="$visitor"/>    
                     @endcan
@@ -90,5 +89,5 @@
         </div>
     </div>
 </div>
-
+<x-visitorcomponents.errormodal-open-visitor />
 @endsection

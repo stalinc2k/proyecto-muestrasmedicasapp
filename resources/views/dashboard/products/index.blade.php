@@ -66,10 +66,6 @@
                     @can('update', $product)
                         <x-productcomponents.modal-edit-product :productId="$product->id" :product="$product" :companies='$companies' />    
                     @endcan
-                    
-                    <x-productcomponents.errormodal-open-product />
-                    <x-scriptcomponent />
-                    
                     @can('delete', $product)
                         <x-productcomponents.modal-delete-product :productId="$product->id" :product="$product" />
                     @endcan
@@ -84,5 +80,5 @@
         </div>
     </div>
 </div>
-
+<x-productcomponents.errormodal-open-product />
 @endsection
