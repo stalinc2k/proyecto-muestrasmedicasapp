@@ -18,7 +18,10 @@ class IncomeController extends Controller
      */
     public function index()
     {
-        //
+        $incomes = Income::orderBy('id','asc')->paginate(10);
+
+        return view('incomes.index',compact('incomes'));
+        
     }
 
     /**

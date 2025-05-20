@@ -111,4 +111,39 @@
     function cerrarModal() {
         location.reload();
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("table-search");
+    const searchInput2 = document.getElementById("table-search2");
+    const tableRows = document.querySelectorAll("tbody tr");
+
+    searchInput.addEventListener("keyup", function () {
+        const filter = searchInput.value.toLowerCase().trim();
+
+        tableRows.forEach(row => {
+            const entryIdCell = row.querySelector("th");
+
+            if (entryIdCell && entryIdCell.textContent.toLowerCase().includes(filter)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+
+    searchInput2.addEventListener("keyup", function () {
+        const filter = searchInput2.value.toLowerCase().trim();
+
+        tableRows.forEach(row => {
+            const prov = row.querySelector("td");
+
+            if (prov && prov.textContent.toLowerCase().includes(filter)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+
+});
 </script>

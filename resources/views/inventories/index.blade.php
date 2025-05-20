@@ -70,5 +70,4 @@
     </div>
 </div>
 <x-inventorycomponents.errormodal-open-inventory />
-<x-scriptcomponent />
 @endsection
