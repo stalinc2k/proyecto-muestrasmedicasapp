@@ -19,8 +19,8 @@ class IncomeController extends Controller
     public function index()
     {
         $incomes = Income::orderBy('id','asc')->paginate(10);
-
-        return view('incomes.index',compact('incomes'));
+        $companies = Company::has('product')->get();
+        return view('incomes.index',compact('incomes','companies'));
         
     }
 
@@ -29,8 +29,7 @@ class IncomeController extends Controller
      */
     public function create()
     {
-        $companies = Company::has('product')->get();
-        return view('incomes.create', compact('companies'));
+        
     }
 
     public function getProducts($company_id){

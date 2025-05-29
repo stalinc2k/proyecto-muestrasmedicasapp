@@ -7,21 +7,22 @@
     });
 
     // Cargar productos al seleccionar proveedor
-    $('#company_id').on('change', function () {
+    $('#company_id').on('change', function() {
         const companyID = $(this).val();
-
         if (companyID) {
             $.ajax({
                 url: '/productos/' + companyID,
                 type: 'GET',
-                success: function (data) {
+                success: function(data) {
                     $('#producto').empty();
                     $('#producto').append('<option value="">Seleccione un producto</option>');
-                    $.each(data, function (key, value) {
-                        $('#producto').append('<option value="' + value.id + '">' + value.description + '</option>');
+                    $.each(data, function(key, value) {
+                        $('#producto').append('<option value="' + value.id + '">' + value
+                            .description + '</option>');
                     });
                 }
             });
+            $(this).prop('disabled', true);
         } else {
             $('#producto').empty().append('<option value="">Seleccione un producto</option>');
         }
@@ -30,16 +31,22 @@
     let productosAgregados = [];
     let contador = 0;
 
-    $('#agregarProducto').on('click', function () {
+    $('#agregarProducto').on('click', function() {
         const companySelect = $('#company_id');
         const productSelect = $('#producto');
         const cantidadInput = $('#cantinventory');
+        const loteInput = $('#codelot');
+        const vencimientoInput = $('#finishlot');
 
         const companyId = companySelect.val();
         const companyText = companySelect.find('option:selected').text();
 
         const productId = productSelect.val();
         const productText = productSelect.find('option:selected').text();
+
+        const loteId = loteInput.val();
+
+        const vtoId = vencimientoInput.val();
 
         const cantidad = parseInt(cantidadInput.val());
 
@@ -52,47 +59,63 @@
             alert('La cantidad debe ser mayor a 0.');
             return;
         }
-
-        const key = companyId + '-' + productId;
-        if (productosAgregados.includes(key)) {
-            alert('Este producto ya fue agregado.');
+        
+        if (loteId.length == 0 || !loteId.trim() === "") {
+            alert('Ingrese Lote');
             return;
         }
 
-        productosAgregados.push(key);
+        const key = companyId + '-' + productId;
 
+        productosAgregados.push(key);
         const tbody = $('#tablaProductos tbody');
-        const newRow = $('<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"></tr>');
+        const newRow = $(
+            '<tr class="bg-blue-500 border-b border-blue-400 text-center"></tr>'
+        );
 
         // Celdas visibles
-        newRow.append('<td class="px-6 py-4">' + companyText + '</td>');
-        newRow.append('<td class="px-6 py-4">' + productText + '</td>');
-        newRow.append('<td class="px-6 py-4">' + cantidad + '</td>');
+        newRow.append('<td class="p-2">' + productText + '</td>');
+        newRow.append('<td class="p-2">' + cantidad + '</td>');
+        newRow.append('<td class="p-2">' + loteId + '</td>');
+        newRow.append('<td class="p-2">' + vtoId + '</td>');
 
         // Botón de eliminar
-        const btnEliminar = $('<button type="button" class="bg-red-500 text-white px-6 py-2 rounded">Eliminar</button>');
+        const btnEliminar = $(
+            '<button type="button" class="bg-red-500 text-white p-2 rounded">Eliminar</button>');
         const actionCell = $('<td></td>').append(btnEliminar);
         newRow.append(actionCell);
 
         // Inputs ocultos con formato productos[0][campo]
-        newRow.append('<input type="hidden" name="productos[' + contador + '][company_id]" value="' + companyId + '">');
-        newRow.append('<input type="hidden" name="productos[' + contador + '][product_id]" value="' + productId + '">');
-        newRow.append('<input type="hidden" name="productos[' + contador + '][cantinventory]" class="input-cantidad" value="' + cantidad + '">');
+        newRow.append('<input type="hidden" name="productos[' + contador + '][company_id]" value="' +
+            companyId + '">');
+        newRow.append('<input type="hidden" name="productos[' + contador + '][product_id]" value="' +
+            productId + '">');
+        newRow.append('<input type="hidden" name="productos[' + contador +
+        '][codelot]" class="input-cantidad" value="' + loteId + '">');
+
+        newRow.append('<input type="hidden" name="productos[' + contador +
+        '][finishlot]" class="input-cantidad" value="' + vtoId + '">');
+
+        newRow.append('<input type="hidden" name="productos[' + contador +
+            '][cantinventory]" class="input-cantidad" value="' + cantidad + '">');
 
         tbody.append(newRow);
         contador++;
 
         actualizarContador();
         actualizarTotalUnidades();
-
+        reiniciar();
         // Eliminar producto de la tabla
-        btnEliminar.on('click', function () {
+        btnEliminar.on('click', function() {
             const index = productosAgregados.indexOf(key);
             if (index > -1) productosAgregados.splice(index, 1);
 
             newRow.remove();
             actualizarContador();
             actualizarTotalUnidades();
+            if (productosAgregados.length < 1) {
+                $('#company_id').prop('disabled', false);
+            }
         });
     });
 
@@ -100,50 +123,91 @@
         $('#contadorProductos').text(productosAgregados.length);
     }
 
+    function reiniciar() {
+        $('#codelot').val("");
+        $('#finishlot').val("");
+    }
+
+
     function actualizarTotalUnidades() {
         let total = 0;
-        $('.input-cantidad').each(function () {
+        $('.input-cantidad').each(function() {
             total += parseInt($(this).val());
         });
         $('#totalunits').val(total);
     }
 
-    function cerrarModal() {
+    document.addEventListener("DOMContentLoaded", function() {
+        const searchInput = document.getElementById("table-search");
+        const tableRows = document.querySelectorAll("tbody tr");
+
+        searchInput.addEventListener("keyup", function() {
+            const filter = searchInput.value.toLowerCase().trim();
+
+            tableRows.forEach(row => {
+                const entryIdCell = row.querySelector("th");
+
+                if (entryIdCell && entryIdCell.textContent.toLowerCase().includes(filter)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+    });
+
+    function cerrarModalPDF() {
+        const modal = document.getElementById('modalPDF'); // <-- esta línea faltaba
+        const iframe = document.getElementById('iframePDF');
+        iframe.src = '';
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    function mostrarModal(id) {
+        const modal = document.getElementById(id);
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function cerrarModal(id) {
+        const modal = document.getElementById(id);
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
         location.reload();
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-    const searchInput = document.getElementById("table-search");
-    const searchInput2 = document.getElementById("table-search2");
-    const tableRows = document.querySelectorAll("tbody tr");
-
-    searchInput.addEventListener("keyup", function () {
-        const filter = searchInput.value.toLowerCase().trim();
-
-        tableRows.forEach(row => {
-            const entryIdCell = row.querySelector("th");
-
-            if (entryIdCell && entryIdCell.textContent.toLowerCase().includes(filter)) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-        });
-    });
-
-    searchInput2.addEventListener("keyup", function () {
-        const filter = searchInput2.value.toLowerCase().trim();
-
-        tableRows.forEach(row => {
-            const prov = row.querySelector("td");
-
-            if (prov && prov.textContent.toLowerCase().includes(filter)) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-        });
-    });
-
-});
+    function abrirModalPDF() {
+        const iframe = document.getElementById('iframePDF');
+        const modal = document.getElementById('modalPDF');
+        iframe.src = '{{ route('listado.empresas') }}';
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
 </script>
+
+@if ($errors->any() && session('editing_income_id'))
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const modalId = 'incomeModalEdit-' + {{ session('editing_income_id') }};
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        });
+    </script>
+@endif
+
+@if ($errors->any())
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const modalId = 'static-modal';
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        });
+    </script>
+@endif
