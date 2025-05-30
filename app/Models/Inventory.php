@@ -11,7 +11,7 @@ class Inventory extends Model
 
     protected $fillable = [
         'user_id', 'product_id', 'income_id',
-        'expense_id', 'dateinventory', 'cantinventory'
+        'expense_id', 'dateinventory', 'cantinventory',  'batch_id'
     ];
 
     public function user(){
@@ -20,6 +20,10 @@ class Inventory extends Model
 
     public function product(){
         return $this->belongsTo(Product::class);
+    }
+
+    public function batch(){
+        return $this->belongsTo(Batch::class);
     }
 
     public function income(){

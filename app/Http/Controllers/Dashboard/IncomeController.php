@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Batch;
 use App\Models\Company;
 use App\Models\Income;
 use App\Models\Inventory;
 use App\Models\Product;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +18,8 @@ class IncomeController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use AuthorizesRequests;
+
     public function index()
     {
         $incomes = Income::orderBy('id','asc')->paginate(10);
@@ -41,13 +45,15 @@ class IncomeController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'entrydate' => 'required|date',
             'productos' => 'required|array|min:1',
             'productos.*.company_id' => 'required|exists:companies,id',
             'productos.*.product_id' => 'required|exists:products,id',
             'productos.*.cantinventory' => 'required|integer|min:1',
+            'productos.*.codelot' => 'required|string|min:5',
+            'productos.*.initlot' => 'required|date',
+            'productos.*.finishlot' => 'required|date|after:today',
         ]);
     
         DB::beginTransaction();
@@ -65,21 +71,38 @@ class IncomeController extends Controller
                 'totalunits' => $totalUnits,
                 'observations' => $request->observations,
             ]);
-    
+            
+           
             // Guardamos el detalle (Inventories)
             foreach ($request->productos as $item) {
-                Inventory::create([
-                    'user_id' => Auth::id(),
-                    'product_id' => $item['product_id'],
-                    'income_id' => $income->id,
-                    'dateinventory' => $request->entrydate,
-                    'cantinventory' => $item['cantinventory'],
-                ]);
+                //VERIFUCAR SI EXITE PRODUCTO Y LOTE
+                $datos = DB::table('inventories')
+                ->join('products', 'products.id', '=', 'inventories.product_id')
+                ->join('batches', 'batches.id', '=', 'inventories.batch_id')
+                ->where('inventories.product_id', $item['product_id'])
+                ->where('batches.code', $item['codelot'])
+                ->exists();
+                if(!$datos){
+                    $batch = Batch::create([
+                        'code' => strtoupper($item['codelot']),
+                        'initlot' => $item['initlot'],
+                        'finishlot' => $item['finishlot'],
+                        'user_id' => Auth::id(),
+                    ]);
+                    Inventory::create([
+                        'user_id' => Auth::id(),
+                        'product_id' => $item['product_id'],
+                        'income_id' => $income->id,
+                        'batch_id' => $batch->id,
+                        'dateinventory' => $request->entrydate,
+                        'cantinventory' => $item['cantinventory'],
+                    ]);
+                }
             }
     
             DB::commit();
     
-            return redirect()->route('incomes.index')->with('success', 'Entrada registrada correctamente.');
+            return redirect()->route('income.index')->with('success', 'Entrada registrada correctamente.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Ocurrió un error al guardar: ' . $e->getMessage());
@@ -113,8 +136,15 @@ class IncomeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Income $income)
+    public function destroy(Request $request, Income $income)
     {
-        //
+        $this->authorize('delete', $income);
+        $page = $request->input('page', 1);
+
+        $income->delete();
+       
+        return redirect()
+            ->route('income.index', ['page' => $page])
+            ->with('success', 'Entrada Eliminada.');
     }
 }

@@ -6,7 +6,7 @@
         }
     });
 
-    // Cargar productos al seleccionar proveedor
+    // FUNCION PARA CARGAR LOS DATOS DE LOS PRODUCTOS SEGUN LA SELECCION DEL PROVEEDOR
     $('#company_id').on('change', function() {
         const companyID = $(this).val();
         if (companyID) {
@@ -32,80 +32,67 @@
     let contador = 0;
 
     $('#agregarProducto').on('click', function() {
+
+        //OBTENER DATOS DEL FORMULARIO
         const companySelect = $('#company_id');
         const productSelect = $('#producto');
         const cantidadInput = $('#cantinventory');
         const loteInput = $('#codelot');
+        const fabricacionInput = $('#initlot');
         const vencimientoInput = $('#finishlot');
-
         const companyId = companySelect.val();
         const companyText = companySelect.find('option:selected').text();
-
         const productId = productSelect.val();
         const productText = productSelect.find('option:selected').text();
-
         const loteId = loteInput.val();
-
+        const fabId = fabricacionInput.val();
         const vtoId = vencimientoInput.val();
-
         const cantidad = parseInt(cantidadInput.val());
-
-        if (!companyId || !productId) {
-            alert('Debe seleccionar proveedor y producto.');
-            return;
-        }
-
-        if (cantidad < 1 || isNaN(cantidad)) {
-            alert('La cantidad debe ser mayor a 0.');
-            return;
-        }
-        
-        if (loteId.length == 0 || !loteId.trim() === "") {
-            alert('Ingrese Lote');
-            return;
-        }
-
         const key = companyId + '-' + productId;
-
         productosAgregados.push(key);
+        //FIN OBTENER DATOS
+
+        //ASIGNAR DATOS A LA TABLA
         const tbody = $('#tablaProductos tbody');
         const newRow = $(
-            '<tr class="bg-blue-500 border-b border-blue-400 text-center"></tr>'
+            '<tr class="bg-gray-500 border-b border-gray-400 text-center"></tr>'
         );
 
-        // Celdas visibles
-        newRow.append('<td class="p-2">' + productText + '</td>');
-        newRow.append('<td class="p-2">' + cantidad + '</td>');
-        newRow.append('<td class="p-2">' + loteId + '</td>');
-        newRow.append('<td class="p-2">' + vtoId + '</td>');
+        // VISUALIZAR LOS DATOS EN LAS CELDAS
+        newRow.append('<td class="p-3 text-white">' + productText + '</td>');
+        newRow.append('<td class="p-3 text-white">' + cantidad + '</td>');
+        newRow.append('<td class="p-3 text-white">' + loteId + '</td>');
+        newRow.append('<td class="p-3 text-white">' + fabId + '</td>');
+        newRow.append('<td class="p-3 text-white">' + vtoId + '</td>');
 
-        // Botón de eliminar
+        // CREAR BOTON DE ELIMINAR PRODUCTO DEL LISTADO
         const btnEliminar = $(
-            '<button type="button" class="bg-red-500 text-white p-2 rounded">Eliminar</button>');
+            '<button type="button" class="text-white p-1 rounded">Eliminar</button>');
         const actionCell = $('<td></td>').append(btnEliminar);
         newRow.append(actionCell);
 
-        // Inputs ocultos con formato productos[0][campo]
+        // AGREGAR LOS DATOS A LOS INPUTS OCULTOS SE CREA UN ARREGLO DE INPUTS CON FORMATO productos[0][campo]
         newRow.append('<input type="hidden" name="productos[' + contador + '][company_id]" value="' +
             companyId + '">');
         newRow.append('<input type="hidden" name="productos[' + contador + '][product_id]" value="' +
             productId + '">');
         newRow.append('<input type="hidden" name="productos[' + contador +
-        '][codelot]" class="input-cantidad" value="' + loteId + '">');
-
+            '][codelot]" class="input-cantidad" value="' + loteId + '">');
         newRow.append('<input type="hidden" name="productos[' + contador +
-        '][finishlot]" class="input-cantidad" value="' + vtoId + '">');
-
+            '][initlot]" class="input-cantidad" value="' + fabId + '">');
+        newRow.append('<input type="hidden" name="productos[' + contador +
+            '][finishlot]" class="input-cantidad" value="' + vtoId + '">');
         newRow.append('<input type="hidden" name="productos[' + contador +
             '][cantinventory]" class="input-cantidad" value="' + cantidad + '">');
-
         tbody.append(newRow);
         contador++;
 
+        // LLAMADO DE LAS FUNCIONES ADICIONALES
         actualizarContador();
         actualizarTotalUnidades();
         reiniciar();
-        // Eliminar producto de la tabla
+
+        // FUNCION PARA ELIMINAR EL PRODUCTO DEL LISTADO
         btnEliminar.on('click', function() {
             const index = productosAgregados.indexOf(key);
             if (index > -1) productosAgregados.splice(index, 1);
@@ -118,24 +105,6 @@
             }
         });
     });
-
-    function actualizarContador() {
-        $('#contadorProductos').text(productosAgregados.length);
-    }
-
-    function reiniciar() {
-        $('#codelot').val("");
-        $('#finishlot').val("");
-    }
-
-
-    function actualizarTotalUnidades() {
-        let total = 0;
-        $('.input-cantidad').each(function() {
-            total += parseInt($(this).val());
-        });
-        $('#totalunits').val(total);
-    }
 
     document.addEventListener("DOMContentLoaded", function() {
         const searchInput = document.getElementById("table-search");
@@ -155,6 +124,24 @@
             });
         });
     });
+
+    function actualizarContador() {
+        $('#contadorProductos').text(productosAgregados.length);
+    }
+
+    function reiniciar() {
+        $('#codelot').val("");
+        $('#initlot').val("");
+        $('#finishlot').val("");
+    }
+
+    function actualizarTotalUnidades() {
+        let total = 0;
+        $('.input-cantidad').each(function() {
+            total += parseInt($(this).val());
+        });
+        $('#totalunits').val(total);
+    }
 
     function cerrarModalPDF() {
         const modal = document.getElementById('modalPDF'); // <-- esta línea faltaba

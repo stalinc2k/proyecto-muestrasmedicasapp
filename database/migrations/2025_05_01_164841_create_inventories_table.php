@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('product_id')->constrained();
+            $table->foreignId('batch_id')->constrained();
             $table->foreignId('income_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('expense_id')->nullable()->constrained()->onDelete('cascade');
             $table->date('dateinventory');

@@ -30,7 +30,6 @@ return new class extends Migration
             $table->string('name', 50);
             $table->foreignId('user_id')->constrained();
             $table->foreignId('visitor_id')->nullable()->constrained();
-            
             $table->timestamps();
             $table->softDeletes('deleted_at')->nullable();
         });
@@ -41,7 +40,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('visitors');
         Schema::dropIfExists('zones');
+        Schema::dropIfExists('visitors');
     }
 };
