@@ -164,10 +164,11 @@
         location.reload();
     }
 
-    function abrirModalPDF() {
+    function abrirModalPDF(entry) {
         const iframe = document.getElementById('iframePDF');
         const modal = document.getElementById('modalPDF');
-        iframe.src = '{{ route('listado.empresas') }}';
+        const url = '{{ route('income.entry', ['entry' => ':entry']) }}'.replace(':entry', entry);
+        iframe.src = url;
         modal.classList.remove('hidden');
         modal.classList.add('flex');
     }

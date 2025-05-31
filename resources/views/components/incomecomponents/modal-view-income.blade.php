@@ -64,11 +64,8 @@
                     <td>Total Unidades {{$inventory->income->totalunits}}</td>
                 </tbody>
             </table>
-           
-            
             <div class="mt-2 flex justify-end">
                 <button type="button" onclick="cerrarModal('entryModalEdit-{{$entryId}}')" class="mr-2 bg-orange-500 text-white px-4 py-2 rounded cursor-pointer">Cancelar</button>
            </div>
-            
         </div>
     </div>    

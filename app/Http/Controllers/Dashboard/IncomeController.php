@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\Income;
 use App\Models\Inventory;
 use App\Models\Product;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,15 @@ class IncomeController extends Controller
         
     }
 
+
+    public function entryPdf($id){
+
+        $id = intval($id);
+        $entry = Income::where('id',$id)->first();
+        $pdf = Pdf::loadView('incomes.listpdf', compact('entry'));
+        return $pdf->stream('entry.pdf');
+
+    }
     /**
      * Show the form for creating a new resource.
      */

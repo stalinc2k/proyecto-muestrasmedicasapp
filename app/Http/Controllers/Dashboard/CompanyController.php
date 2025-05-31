@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\Income;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
@@ -23,10 +24,8 @@ class CompanyController extends Controller
         return view('dashboard.companies.index', compact('companies'));
     }
 
-    public function companyPdf(){
-
-        $companies = Company::orderBy('code', 'asc')->get();
-        $pdf = Pdf::loadView('dashboard.companies.listpdf', compact('companies'));
+    public function companyPdf(Income $entry){
+        $pdf = Pdf::loadView('dashboard.incomes.listpdf', compact('entry'));
         return $pdf->stream('list_company.pdf');
 
     }

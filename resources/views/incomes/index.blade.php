@@ -63,6 +63,7 @@
                             {{ $entry->observations }}
                         </td>
                         <td class="px-2 py-2 justify-between">
+                            <x-incomecomponents.listpdf-income :entryId="$entry->id"/>
                             @can('update', $entry)
                                 <x-incomecomponents.modal-view-income :entryId="$entry->id" :entry="$entry" />
                             @endcan
