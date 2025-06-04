@@ -18,17 +18,35 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        //
+        $visitors = Visitor::orderBy('code', 'asc')->get();
+        $products = Product::orderBy('code', 'asc')->get();
+        $expenses = Expense::orderBy('id', 'asc')->get();
+        return view('expenses.index', compact('expenses','visitors','products'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
-    {
+    {   
         $visitors = Visitor::orderBy('code', 'asc')->get();
         $products = Product::orderBy('code', 'asc')->get();
-        return view('expenses.create',compact('visitors','products'));
+        
+        //BUSCAR STOCKS
+        $stocks = Inventory::with(['product', 'batch'])
+        ->select(
+            'product_id',
+            'batch_id',
+            DB::raw("SUM(CASE WHEN income_id IS NOT NULL THEN cantinventory ELSE 0 END) as entradas"),
+            DB::raw("SUM(CASE WHEN expense_id IS NOT NULL THEN cantinventory ELSE 0 END) as salidas"),
+            DB::raw("SUM(CASE WHEN income_id IS NOT NULL THEN cantinventory ELSE 0 END) - 
+                     SUM(CASE WHEN expense_id IS NOT NULL THEN cantinventory ELSE 0 END) as stock")
+        )
+        ->groupBy('product_id', 'batch_id')
+        ->havingRaw('stock > 0')
+        ->get();
+
+        return view('expenses.create',compact('visitors','products', 'stocks'));
     }
 
     /**

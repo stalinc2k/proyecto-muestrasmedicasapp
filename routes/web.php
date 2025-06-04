@@ -57,6 +57,7 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::get('/listcompany', [CompanyController::class, 'companyPdf'])->name('listado.empresas');
     Route::get('/listproduct', [ProductController::class, 'productPdf'])->name('listado.productos');
     Route::get('/listentry/{entry}', [IncomeController::class, 'entryPdf'])->name('income.entry');
+    Route::get('/listexpense/{expense}', [ExpenseController::class, 'expensePdf'])->name('expense.expense');
     
 });
 
