@@ -49,11 +49,14 @@ class ExpenseController extends Controller
         return view('expenses.create',compact('visitors','products', 'stocks'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
+        $datos = json_decode($request->input('datos'), true);
+
+        foreach($datos as $dato){
+            dd($dato);
+        }
 
         $request->validate([
             'visitor_id' => 'required|exists:visitors,id',

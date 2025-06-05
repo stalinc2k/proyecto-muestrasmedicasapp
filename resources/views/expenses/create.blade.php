@@ -1,27 +1,43 @@
 @extends('dashboard.master')
 
 @section('content')
+    <div>
+        @if (session('error'))
+            <div>
+                {{ session('error') }}
+            </div>
+        @else
+            <div>
+                {{ session('success') }}
+            </div>
+        @endif
+    </div>
     <div class="flex w-fullbg-gray-900 bg-opacity-50 p-20 ">
-        <div class="bg-white w-3/5 p-4 rounded-2xl">
-            <div class="">
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    for="visitor_id">Visitador:</label>
+        <div class="bg-white w-1/2 p-4 rounded-2xl">
+            <h3 class="text-1xl text-center m-2 uppercase font-bold dark:text-white">datos salida</h3>
+            <div>
+                <h3>REPRESENTANTE DE VENTA</h3>
                 <select
-                    class="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    name="visitor_id" id="visitor_id" required>
-                    <option value="">Seleccione</option>
+                    class="block w-full p-2 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    name="visitor_id" id="visitor_id" onchange="bloquearVisitador()" required>
+                    <option value="">Seleccione representante</option>
                     @foreach ($visitors as $visitor)
                         <option value="{{ $visitor->id }}">{{ $visitor->code . ' - ' . $visitor->name }}</option>
                     @endforeach
                 </select>
+                <div class="mt-2">
+                    <h3>FECHA SALIDA</h3>
+                    <input type="date" id="expensedate" name="expensedate" value="{{ now()->toDateString() }}"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
             </div>
             <div>
 
                 <hr class="my-2">
-                <h3>Lotes Disponibles</h3>
+                <h3>STOCK DISPONIBLE</h3>
                 <div class="w-full">
 
-                    <div class="pb-4 bg-white dark:bg-gray-900">
+                    <div class="bg-white dark:bg-gray-900">
                         <label for="table-search" class="sr-only">Search</label>
                         <input type="text" id="table-search"
                             class="m-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-96
@@ -29,11 +45,13 @@
                                     dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Buscar en la tabla">
                     </div>
-
-                    <div class="w-full overflow-y-auto overflow-x-auto">
+                    <hr>
+                    <div class="w-full overflow-y-auto overflow-x-auto mt-2">
                         <table id="tablaLotes" class="w-full text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-white uppercase bg-gray-700 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
+                                    <th scope="col" class="p-2">#</th>
+                                    <th scope="col" class="p-2">Codigo</th>
                                     <th scope="col" class="p-2">Producto</th>
                                     <th scope="col" class="p-2">Lote</th>
                                     <th scope="col" class="p-2">Vencimiento</th>
@@ -43,34 +61,50 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $cont = 0;
+                                @endphp
                                 @foreach ($stocks as $stock)
+                                    @php
+                                        $cont++;
+                                    @endphp
                                     <tr>
                                         <td scope="col" class="p-1">
+                                            {{ $cont }}
+                                        </td>
+                                        <td scope="col" class="p-1">
+                                            {{ $stock->product->code }}
+                                        </td>
+                                        <td scope="col" class="p-1">
                                             {{ $stock->product->description }}
-                                            <input type="hidden" value="{{ $stock->product->description }}" id="descprod-{{ $stock->batch->id }}">
-                                            <input type="hidden" value="{{ $stock->product->id }}" id="idprod-{{ $stock->batch->id }}">
+                                            <input type="hidden" value="{{ $stock->product->description }}"
+                                                id="descprod-{{ $cont }}">
+                                            <input type="hidden" value="{{ $stock->product->id }}"
+                                                id="idprod-{{ $cont }}">
                                         </td>
                                         <td scope="col" class="p-1">
                                             {{ $stock->batch->code }}
-                                            <input type="hidden" value="{{ $stock->batch->code }}" id="codebatch-{{ $stock->batch->id }}">
-                                            <input type="hidden" value="{{ $stock->batch->id }}" id="idbatch-{{ $stock->batch->id }}">
+                                            <input type="hidden" value="{{ $stock->batch->code }}"
+                                                id="codebatch-{{ $cont }}">
+                                            <input type="hidden" value="{{ $stock->batch->id }}"
+                                                id="idbatch-{{ $cont }}">
                                         </td>
                                         <td scope="col" class="p-1">
                                             {{ $stock->batch->finishlot }}
-                                            <input type="hidden" value="{{ $stock->batch->finishlot }}" id="finishbatch-{{ $stock->batch->id }}">
+                                            <input type="hidden" value="{{ $stock->batch->finishlot }}"
+                                                id="finishbatch-{{ $cont }}">
                                         </td>
                                         <td scope="col" class="p-1">
                                             {{ $stock->stock }}
-                                            <input type="hidden" id="stock-{{ $stock->batch->id }}"
-                                                value="{{ $stock->stock }}">
                                         </td>
                                         <td scope="col" class="p-1">
-                                            <input type="number" id="cantidad-{{ $stock->batch->id }}" min="1"
+                                            <input type="number" id="cantidad-{{ $cont }}" min="1"
                                                 max="{{ $stock->stock }}" placeholder="Digite cantidad" class="w-40">
                                         </td>
                                         <td scope="col" class="p-1">
-                                            <button type="button" id="asignar-{{ $stock->batch->id }}"
-                                                onclick="seleccionarFila({{ $stock->batch->id }})" class="bg-blue-700 text-white px-4 py-2 rounded">
+                                            <button type="button" id="asignar-{{ $cont }}"
+                                                onclick="seleccionarFila({{ $cont }})"
+                                                class="bg-blue-700 text-white px-4 py-2 rounded">
                                                 Asignar
                                             </button>
                                         </td>
@@ -82,19 +116,38 @@
                 </div>
             </div>
         </div>
-        <div class=" w-2/5 h-60 ml-4 rounded-2xl" id="asignaciones">
-            <table id="datosAsignados" class="w-full text-left text-gray-500 dark:text-gray-400">
-                <thead class="text-white uppercase bg-gray-700 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="p-1">Producto</th>
-                        <th scope="col" class="p-1">Lote</th>
-                        <th scope="col" class="p-1">Vto</th>
-                        <th scope="col" class="p-1">Cantidad</th>
-                        <th scope="col" class="p-1">Acción</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <div class=" w-1/2 ml-4 rounded-2xl bg-white" id="asignaciones">
+            <h3 class="text-1xl text-center m-2 uppercase font-bold dark:text-white">DETALLES</h3>
+            <div class="p-4">
+                <form action="{{route('expense.store')}}" method="Post" id="formularioExpense">
+                    @csrf
+                    <table id="datosAsignados" class="w-full text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-white uppercase bg-blue-700 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="p-1 hidden">ID_Prod</th>
+                                <th scope="col" class="p-1">Code</th>
+                                <th scope="col" class="p-1">Producto</th>
+                                <th scope="col" class="p-1 hidden">ID_Lote</th>
+                                <th scope="col" class="p-1">Lote</th>
+                                <th scope="col" class="p-1">Vto</th>
+                                <th scope="col" class="p-1">Cantidad</th>
+                                <th scope="col" class="p-1">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <input type="hidden" name="datos" id="datos">
+                        </tbody>
+                    </table>
+                    <hr class="mt-2">
+                    <div class="w-30">
+                        Total Unidades
+                        <p id="totalUnidades" class="">0</p>
+                    </div>
+                    <button type="submit"
+                        class="m-2 bg-green-600 font-semibold text-white p-2 rounded-md">Crear Salida
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
     <script>
@@ -115,8 +168,12 @@
 
         });
 
+
+
         function seleccionarFila(id) {
-            console.log(id);
+            let totalDeUnidades = 0;
+            let i = id - 1;
+            let restante = 0;
             const btnAsignar = document.getElementById('asignar-' + id);
             const cantidadInput = document.getElementById('cantidad-' + id);
             const idPro = document.getElementById('idprod-' + id);
@@ -124,17 +181,21 @@
             const idLot = document.getElementById('idbatch-' + id);
             const codLot = document.getElementById('codebatch-' + id);
             const venLot = document.getElementById('finishbatch-' + id);
-            const stock = parseInt(document.getElementById('stock-' + id).value);
+            const tablaLotes = document.querySelector('#tablaLotes tbody');
+            const filas = tablaLotes.getElementsByTagName('tr');
+            const columnas = filas[i].getElementsByTagName('td');
+            const stock = parseInt(columnas[5].textContent);
+            const codigoP = columnas[1].textContent;
             const tabla = document.getElementById('datosAsignados').getElementsByTagName('tbody')[0];
             const cantidad = parseInt(cantidadInput.value);
 
-            console.log(idPro.value);
-            console.log(descPro.value);
-            console.log(idLot.value);
-            console.log(codLot.value);
-            console.log(venLot.value);
-            console.log(cantidad);
-
+            /* console.log(idPro.value);
+             console.log(descPro.value);
+             console.log(idLot.value);
+             console.log(codLot.value);
+             console.log(venLot.value);
+             console.log(cantidad);
+             */
 
             if (isNaN(cantidad) || cantidad <= 0) {
                 alert("Por favor ingresa una cantidad válida.");
@@ -147,31 +208,111 @@
             }
 
             const fila = tabla.insertRow();
+            fila.classList.add('w-full', 'text-left', 'bg-white', 'text-gray-500', 'dark:text-gray-400', 'border-b-2');
+            const celdaIdProducto = fila.insertCell(0);
+            celdaIdProducto.classList.add('hidden');
+            const celdaCodProducto = fila.insertCell(1);
+            const celdaProducto = fila.insertCell(2);
+            const celdaIdLote = fila.insertCell(3);
+            celdaIdLote.classList.add('hidden');
 
-            const celdaProducto = fila.insertCell(0);
-            const celdaLote = fila.insertCell(1);
-            const celdaVence = fila.insertCell(2);
-            const celdaCantidad = fila.insertCell(3);
-            const eliminar = fila.insertCell(4);
+            const celdaLote = fila.insertCell(4);
+            const celdaVence = fila.insertCell(5);
+            const celdaCantidad = fila.insertCell(6);
+            const eliminar = fila.insertCell(7);
+            const totalU = document.querySelector('#totalUnidades');
 
+
+            celdaIdProducto.textContent = idPro.value;
+            celdaCodProducto.textContent = codigoP;
             celdaProducto.textContent = descPro.value;
+            celdaIdLote.textContent = idLot.value;
             celdaLote.textContent = codLot.value;
             celdaVence.textContent = venLot.value;
             celdaCantidad.textContent = cantidad;
-            eliminar.innerHTML = `<button onclick="eliminarFila(this, ${id})">Eliminar</button>`;
-            stock = stock - cantidad;
-            document.getElementById('stock-' + id).value = stock;
+            restante = stock - cantidad;
+            const unidades = parseInt(totalU.textContent) + cantidad;
+            totalU.textContent = unidades;
+
+            actualizarStock(id, restante);
+            eliminar.innerHTML =
+                `<button class="btn-eliminar" onclick="eliminarFila(this, ${id}, ${stock}, ${unidades},${cantidad})">Eliminar</button>`;
             cantidadInput.value = 0;
         }
 
-        function eliminarFila(boton, index){
-            const cantidad = parseInt(document.getElementById('cantidad-' + id).value);
-            const stock = parseInt(document.getElementById('stock-' + id).value);
-
-            stock = stock + cantidad;
-            document.getElementById('stock-' + id).value = stock;
-
+        function actualizarStock(index, stock) {
+            index--;
+            const tablaLotes = document.querySelector('#tablaLotes tbody');
+            const filas = tablaLotes.getElementsByTagName('tr');
+            const columnas = filas[index].getElementsByTagName('td');
+            const colStock = columnas[5];
+            colStock.textContent = stock;
         }
+
+        function eliminarFila(boton, index, stock, totU, cant) {
+            index--;
+            const tablaLotes = document.querySelector('#tablaLotes tbody');
+            const filas = tablaLotes.getElementsByTagName('tr');
+            const columnas = filas[index].getElementsByTagName('td');
+            const colStock = columnas[5];
+            const totalU = document.querySelector('#totalUnidades');
+            totU = totU - cant;
+            colStock.textContent = stock;
+            totalU.textContent = totU;
+
+            document.querySelector('#datosAsignados').addEventListener('click', function(event) {
+                // Verificamos si el clic fue en un botón "Eliminar"
+                if (event.target && event.target.matches('.btn-eliminar')) {
+                    // Seleccionamos la fila que contiene el botón
+                    const fila = event.target.closest('tr');
+
+                    // Eliminamos la fila
+                    fila.remove();
+                }
+            });
+        }
+
+        function bloquearVisitador() {
+            const select = document.getElementById('visitor_id');
+            select.disabled = true;
+        }
+
+
+        document.querySelector('#formularioExpense').addEventListener('submit', function (e) {
+            const tablaDatosEnvio = document.querySelector('#datosAsignados tbody');
+            const rows = tablaDatosEnvio.getElementsByTagName('tr');
+            const idv = parseInt(document.getElementById('visitor_id').value);
+            const date = document.getElementById('expensedate').value;
+
+            datos = [];
+            if (rows.length < 1) {
+                alert('No se ha ingresado detalles');
+                return;
+            }
+
+            if (isNaN(idv) || idv < 1) {
+                alert('No se ha escogido Representante');
+                return;
+            }
+
+            for (let i = 0; i < rows.length; i++) {
+                let json = {};
+                const cols = rows[i].getElementsByTagName('td');
+                const idp = parseInt(cols[0].textContent);
+                const idl = parseInt(cols[3].textContent);
+                const cnt = parseInt(cols[6].textContent);
+                console.log(idp, idl, cnt, idv, date);
+
+                datos.push({
+                    id_pro: idp,
+                    id_lot: idl,
+                    id_vis: idv,
+                    cant: cnt,
+                    date: date,
+                });
+            }
+            document.getElementById('datos').value = JSON.stringify(datos);
+        });
 
         function cerrarModalPDF() {
             const modal = document.getElementById('modalPDF'); // <-- esta línea faltaba

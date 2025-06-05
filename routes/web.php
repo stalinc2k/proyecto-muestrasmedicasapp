@@ -41,6 +41,7 @@ Route::middleware(['auth'])->prefix('inventories')->group(function () {
 
 Route::get('/productos/{company}', [IncomeController::class, 'getProducts'])->middleware('auth');
 Route::get('/inventories/stock/{product}', [InventoryController::class, 'getStock'])->middleware('auth');
+Route::post('/expense', [ExpenseController::class, 'store'])->middleware('auth');
 
 
 
