@@ -7,15 +7,20 @@ use App\Models\Expense;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Visitor;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ExpenseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    use AuthorizesRequests;
+
     public function index()
     {
         $visitors = Visitor::orderBy('code', 'asc')->get();
@@ -52,52 +57,51 @@ class ExpenseController extends Controller
 
     public function store(Request $request)
     {
-        $datos = json_decode($request->input('datos'), true);
+        $this->authorize('create', Expense::class);
+        $idvis = $request->productos[0]['id_vis'];
+        $date = $request->productos[0]['date'];
+        $obs = $request->productos[0]['obs'];
 
-        foreach($datos as $dato){
-            dd($dato);
+       $total = 0;
+        foreach ($request->productos as $item) {
+            $total = $total + intval($item['cant']);
+           
         }
-
-        $request->validate([
-            'visitor_id' => 'required|exists:visitors,id',
-            'deliverydate' => 'required|date',
+        $request -> validate([
             'productos' => 'required|array|min:1',
-            'productos.*.product_id' => 'required|exists:products,id',
-            'productos.*.cantinventory' => 'required|integer|min:1',
+            'productos.*.id_vis' => 'required|exists:visitors,id',
+            'productos.*.id_pro' => 'required|exists:products,id',
+            'productos.*.id_lot' => 'required|exists:batches,id',
+            'productos.*.cant' => 'required|integer|min:1',
+            'productos.*.date' => 'required|date',
+
         ]);
-    
+
         DB::beginTransaction();
     
         try {
-            $total = collect($request->productos)->sum('cantinventory');
     
             $expense = Expense::create([
                 'user_id' => Auth::id(),
-                'visitor_id' => $request->visitor_id,
-                'deliverydate' => $request->deliverydate,
+                'visitor_id' => $idvis,
+                'deliverydate' => $date,
                 'totalunits' => $total,
-                'observations' => $request->observations,
+                'observations' => $obs,
             ]);
     
             foreach ($request->productos as $item) {
-                $stock = Inventory::where('product_id', $item['product_id'])->whereNotNull('income_id')->sum('cantinventory') -
-                         Inventory::where('product_id', $item['product_id'])->whereNotNull('expense_id')->sum('cantinventory');
-    
-                if ($item['cantinventory'] > $stock) {
-                    throw new \Exception("Stock insuficiente para el producto ID {$item['product_id']}");
-                }
-    
                 Inventory::create([
                     'user_id' => Auth::id(),
-                    'product_id' => $item['product_id'],
+                    'product_id' => $item['id_pro'],
                     'expense_id' => $expense->id,
-                    'dateinventory' => $request->deliverydate,
-                    'cantinventory' => $item['cantinventory'],
+                    'batch_id' => $item['id_lot'],
+                    'dateinventory' => $item['date'],
+                    'cantinventory' => $item['cant'],
                 ]);
             }
     
             DB::commit();
-            return redirect()->route('expenses.index')->with('success', 'Salida registrada correctamente.');
+            return redirect()->route('expense.index')->with('success', 'Salida registrada correctamente.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Error: ' . $e->getMessage());
@@ -105,9 +109,15 @@ class ExpenseController extends Controller
     }
     
 
-    /**
-     * Display the specified resource.
-     */
+    public function expensePdf($id){
+
+        $id = intval($id);
+        $expense = Expense::where('id',$id)->first();
+        $pdf = Pdf::loadView('expenses.listpdf', compact('expense'));
+        return $pdf->stream('expense.pdf');
+
+    }
+
     public function show(Expense $expense)
     {
         //
@@ -137,3 +147,4 @@ class ExpenseController extends Controller
         //
     }
 }
+

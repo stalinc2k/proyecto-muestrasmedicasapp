@@ -1,11 +1,11 @@
 
-@props(['entryId','entry'])
+@props(['expenseId','expense'])
 
-    <a onclick="mostrarModal('entryModalEdit-{{$entryId}}')" 
+    <a onclick="mostrarModal('expenseModalEdit-{{$expenseId}}')" 
         class="text-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-sm rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500 cursor-pointer">Visualizar</a>
-    <div id="entryModalEdit-{{$entryId}}" class="fixed inset-0 bg-gray-900 bg-opacity-50 items-center justify-center hidden z-50 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"">
+    <div id="expenseModalEdit-{{$expenseId}}" class="fixed inset-0 bg-gray-900 bg-opacity-50 items-center justify-center hidden z-50 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"">
         <div class="bg-white p-6 rounded-xl shadow-lg">
-            <h2 class="text-xl font-bold mb-4 text-center">Visualización del Ingreso</h2>
+            <h2 class="text-xl font-bold mb-4 text-center">Visualización del Egreso</h2>
             @include('fragment._errors-form')
             <hr class="m-5">
             <table class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
@@ -13,19 +13,19 @@
                     <tr>
                         <th scope="col" class="px-6 py-3">Ingreso Num.</th>
                         <th scope="col" class="px-6 py-3">Fecha.</th>
-                        <th scope="col" class="px-6 py-3">Proveedor</th>
+                        <th scope="col" class="px-6 py-3">Representante Venta</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                         <td class="px-6 py-4">
-                            {{$entry->id}}
+                            {{$expense->id}}
                         </td>
                         <td class="px-6 py-4">
-                            {{$entry->entrydate}}
+                            {{$expense->expensedate}}
                         </td>
                         <td class="px-6 py-4">
-                            {{$entry->company->name}}
+                            {{$expense->visitor->name}}
                         </td>                    
                     </tr>
                 </tbody>
@@ -42,7 +42,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($entry->inventory as $inventory)
+                    @foreach ($expense->inventory as $inventory)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                         <td class="px-6 py-4">
                             {{$inventory->cantinventory}}
@@ -61,11 +61,11 @@
                         </td>
                     </tr>
                     @endforeach
-                    <td>Total Unidades {{$inventory->income->totalunits}}</td>
+                    <td>Total Unidades {{$inventory->expense->totalunits}}</td>
                 </tbody>
             </table>
             <div class="mt-2 flex justify-end">
-                <button type="button" onclick="cerrarModal('entryModalEdit-{{$entryId}}')" class="mr-2 bg-orange-500 text-white px-4 py-2 rounded cursor-pointer">Cancelar</button>
+                <button type="button" onclick="cerrarModal('expenseModalEdit-{{$expenseId}}')" class="mr-2 bg-orange-500 text-white px-4 py-2 rounded cursor-pointer">Cancelar</button>
            </div>
         </div>
     </div>    
