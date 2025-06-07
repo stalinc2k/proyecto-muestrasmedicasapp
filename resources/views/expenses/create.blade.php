@@ -12,7 +12,7 @@
             </div>
         @endif
     </div>
-    <div class="flex w-fullbg-gray-900 bg-opacity-50 p-20 ">
+    <div class="flex w-fullbg-gray-900 bg-opacity-50 p-10 ">
         <div class="bg-white w-1/2 p-4 rounded-2xl">
             <h3 class="text-1xl text-center m-2 uppercase font-bold dark:text-white">datos salida</h3>
             <div>
@@ -113,9 +113,14 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="mt-10">
+                        <label for="observations" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Observaciones</label>
+                        <textarea id="observations" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Escribe tus observaciones..."></textarea>
+                    </div>
                 </div>
             </div>
         </div>
+        
         <div class=" w-1/2 ml-4 rounded-2xl bg-white" id="asignaciones">
             <h3 class="text-1xl text-center m-2 uppercase font-bold dark:text-white">DETALLES</h3>
             <div class="p-4">
@@ -143,9 +148,14 @@
                         Total Unidades
                         <p id="totalUnidades" class="">0</p>
                     </div>
-                    <button type="submit"
-                        class="m-2 bg-green-600 font-semibold text-white p-2 rounded-md">Crear Salida
-                    </button>
+                    <div>
+                            <button type="button" onclick="cancelar()"
+                                class="m-2 bg-orange-600 font-semibold text-white p-2 rounded-md">Cancelar
+                            </button>
+                            <button type="submit" id="create"
+                                class="m-2 bg-green-600 font-semibold text-white p-2 rounded-md">Crear Salida
+                            </button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -155,7 +165,8 @@
             const searchInput = document.getElementById('table-search');
             const table = document.getElementById('tablaLotes');
             const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-
+            const enviar = document.getElementById('create');
+            enviar.disabled = true;
             searchInput.addEventListener('keyup', function() {
                 const filter = searchInput.value.toLowerCase();
 
@@ -168,6 +179,9 @@
 
         });
 
+        function cancelar(){
+            window.location.href = "{{route('expense.index')}}";
+        }
 
 
         function seleccionarFila(id) {
@@ -175,7 +189,6 @@
             let i = id - 1;
             let restante = 0;
             const btnAsignar = document.getElementById('asignar-' + id);
-            const cantidadInput = document.getElementById('cantidad-' + id);
             const idPro = document.getElementById('idprod-' + id);
             const descPro = document.getElementById('descprod-' + id);
             const idLot = document.getElementById('idbatch-' + id);
@@ -187,15 +200,7 @@
             const stock = parseInt(columnas[5].textContent);
             const codigoP = columnas[1].textContent;
             const tabla = document.getElementById('datosAsignados').getElementsByTagName('tbody')[0];
-            const cantidad = parseInt(cantidadInput.value);
-
-            /* console.log(idPro.value);
-             console.log(descPro.value);
-             console.log(idLot.value);
-             console.log(codLot.value);
-             console.log(venLot.value);
-             console.log(cantidad);
-             */
+            const cantidad = parseInt(document.getElementById('cantidad-' + id).value);
 
             if (isNaN(cantidad) || cantidad <= 0) {
                 alert("Por favor ingresa una cantidad válida.");
@@ -236,8 +241,7 @@
 
             actualizarStock(id, restante);
             eliminar.innerHTML =
-                `<button class="btn-eliminar" onclick="eliminarFila(this, ${id}, ${stock}, ${unidades},${cantidad})">Eliminar</button>`;
-            cantidadInput.value = 0;
+                `<button class="btn-eliminar" onclick="eliminarFila(this, ${id})">Eliminar</button>`;
         }
 
         function actualizarStock(index, stock) {
@@ -249,16 +253,19 @@
             colStock.textContent = stock;
         }
 
-        function eliminarFila(boton, index, stock, totU, cant) {
+        function eliminarFila(boton, index) {
             index--;
             const tablaLotes = document.querySelector('#tablaLotes tbody');
             const filas = tablaLotes.getElementsByTagName('tr');
             const columnas = filas[index].getElementsByTagName('td');
             const colStock = columnas[5];
             const totalU = document.querySelector('#totalUnidades');
-            totU = totU - cant;
-            colStock.textContent = stock;
-            totalU.textContent = totU;
+            console.log(filas);
+            console.log(columnas);
+            console.log(colStock.textContent);
+            console.log(totalU.textContent);
+            
+
 
             document.querySelector('#datosAsignados').addEventListener('click', function(event) {
                 // Verificamos si el clic fue en un botón "Eliminar"
@@ -275,73 +282,60 @@
         function bloquearVisitador() {
             const select = document.getElementById('visitor_id');
             select.disabled = true;
-        }
+            const enviar = document.getElementById('create');
+            enviar.disabled = false;
 
+        }
 
         document.querySelector('#formularioExpense').addEventListener('submit', function (e) {
-            const tablaDatosEnvio = document.querySelector('#datosAsignados tbody');
-            const rows = tablaDatosEnvio.getElementsByTagName('tr');
-            const idv = parseInt(document.getElementById('visitor_id').value);
-            const date = document.getElementById('expensedate').value;
+    e.preventDefault(); // Detiene el envío automático del formulario
 
-            datos = [];
-            if (rows.length < 1) {
-                alert('No se ha ingresado detalles');
-                return;
-            }
+    const tablaDatosEnvio = document.querySelector('#datosAsignados tbody');
+    const rows = tablaDatosEnvio.getElementsByTagName('tr');
+    const idv = parseInt(document.getElementById('visitor_id').value);
+    const date = document.getElementById('expensedate').value;
+    const obs = document.getElementById('observations').value;
+    const formulario = document.getElementById("formularioExpense");
 
-            if (isNaN(idv) || idv < 1) {
-                alert('No se ha escogido Representante');
-                return;
-            }
+    if (rows.length < 1) {
+        alert('No se ha ingresado detalles');
+        return;
+    }
 
-            for (let i = 0; i < rows.length; i++) {
-                let json = {};
-                const cols = rows[i].getElementsByTagName('td');
-                const idp = parseInt(cols[0].textContent);
-                const idl = parseInt(cols[3].textContent);
-                const cnt = parseInt(cols[6].textContent);
-                console.log(idp, idl, cnt, idv, date);
+    if (isNaN(idv) || idv < 1) {
+        alert('No se ha escogido Representante');
+        return;
+    }
 
-                datos.push({
-                    id_pro: idp,
-                    id_lot: idl,
-                    id_vis: idv,
-                    cant: cnt,
-                    date: date,
-                });
-            }
-            document.getElementById('datos').value = JSON.stringify(datos);
-        });
+    for (let i = 0; i < rows.length; i++) {
+        const cols = rows[i].getElementsByTagName('td');
+        const idp = parseInt(cols[0].textContent);
+        const idl = parseInt(cols[3].textContent);
+        const cnt = parseInt(cols[6].textContent);
 
-        function cerrarModalPDF() {
-            const modal = document.getElementById('modalPDF'); // <-- esta línea faltaba
-            const iframe = document.getElementById('iframePDF');
-            iframe.src = '';
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+        console.log(idp, idl, cnt, idv, date, obs);
+
+        // Función para crear y agregar un input hidden
+        function crearInputOculto(name, value) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = name;
+            input.value = value;
+            formulario.appendChild(input);
         }
 
-        function mostrarModal(id) {
-            const modal = document.getElementById(id);
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
+        crearInputOculto(`productos[${i}][id_pro]`, idp);
+        crearInputOculto(`productos[${i}][id_lot]`, idl);
+        crearInputOculto(`productos[${i}][id_vis]`, idv);
+        crearInputOculto(`productos[${i}][cant]`, cnt);
+        crearInputOculto(`productos[${i}][date]`, date);
+        crearInputOculto(`productos[${i}][obs]`, obs);
+    }
 
-        function cerrarModal(id) {
-            const modal = document.getElementById(id);
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
-            location.reload();
-        }
+    // Enviamos el formulario solo una vez
+    formulario.submit();
+});
 
-        function abrirModalPDF(expense) {
-            const iframe = document.getElementById('iframePDF');
-            const modal = document.getElementById('modalPDF');
-            const url = '{{ route('expense.expense', ['expense' => ':expense']) }}'.replace(':expense', expense);
-            iframe.src = url;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
+       
     </script>
 @endsection

@@ -7,6 +7,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
 class InventoryController extends Controller
@@ -15,6 +16,7 @@ class InventoryController extends Controller
      * Display a listing of the resource.
      */
     use SoftDeletes;
+    use AuthorizesRequests;
     public function index()
     {
         $inventories = Inventory::groupBy('id')->paginate(7);

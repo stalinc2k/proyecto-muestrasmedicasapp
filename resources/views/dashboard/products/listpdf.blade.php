@@ -59,7 +59,12 @@
                     <td>{{ $product->description}}</td>
                     <td>{{ $product->barcode??'0000000000'}}</td>
                     <td>
-                        <img src="{{public_path($product->image)}}" class="logo" alt="">
+                        @if ($product->image)
+                            <img src="{{public_path($product->image)}}" class="logo" alt="">
+                        @else
+                            Sin Imagen
+                        @endif
+                        
                     </td>
                 </tr>
             @endforeach

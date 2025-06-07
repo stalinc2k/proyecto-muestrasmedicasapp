@@ -60,7 +60,13 @@
                     <td>{{ $company->name}}</td>
                     <td>{{ $company->address}}</td>
                     <td>{{ $company->phone}}</td>
-                    <td>{{ $company->type}}</td>
+                    <td>
+                        @if ($company->type == 'supplier')
+                            Proveedor
+                        @else
+                            Empresa Principal
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </tbody>

@@ -10,7 +10,7 @@
 </button>
   
   <!-- Main modal -->
-  <div id="static-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed inset-0 bg-gray-900 bg-opacity-50 items-center justify-center hidden z-50 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+  <div id="static-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed inset-0 bg-gray-900 bg-opacity-50 items-center justify-center hidden z-50 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full overflow-y-auto">
       <div class="relative p-4 w-full max-w-3xl max-h-full">
           <!-- Modal content -->
           <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">

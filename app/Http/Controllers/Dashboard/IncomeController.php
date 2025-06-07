@@ -55,6 +55,8 @@ class IncomeController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Income::class);
+
         $request->validate([
             'entrydate' => 'required|date',
             'productos' => 'required|array|min:1',

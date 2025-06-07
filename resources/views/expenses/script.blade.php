@@ -1,5 +1,6 @@
 <script>
-function cerrarModalPDF() {
+    
+    function cerrarModalPDF() {
             const modal = document.getElementById('modalPDF'); // <-- esta línea faltaba
             const iframe = document.getElementById('iframePDF');
             iframe.src = '';

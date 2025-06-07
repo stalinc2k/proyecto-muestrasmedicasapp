@@ -41,26 +41,26 @@
         <img class="nombre" src="{{ public_path('img/logos/logo_nombre.jpeg') }}" alt="">
     </div>
     <div >
-        <h2 >Impresión del Ingreso</h2>
+        <h2 >Impresión del Egreso</h2>
         <hr >
         <table>
             <thead>
                 <tr>
-                    <th>Ingreso Num.</th>
+                    <th>Egreso Num.</th>
                     <th>Fecha.</th>
-                    <th>Proveedor</th>
+                    <th>Representante</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>
-                        {{$entry->id}}
+                        {{$expense->id}}
                     </td>
                     <td>
-                        {{$entry->entrydate}}
+                        {{$expense->deliverydate}}
                     </td>
                     <td>
-                        {{$entry->company->name}}
+                        {{$expense->visitor->name}}
                     </td>                    
                 </tr>
             </tbody>
@@ -77,7 +77,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($entry->inventory as $inventory)
+                @foreach ($expense->inventory as $inventory)
                 <tr>
                     <td>
                         {{$inventory->cantinventory}}
@@ -97,7 +97,7 @@
                 </tr>
                 @endforeach
                 <tr>
-                    <td colspan="5">Total Unidades {{$inventory->income->totalunits}}</td>
+                    <td colspan="5">Total Unidades {{$inventory->expense->totalunits}}</td>
                 </tr>
             </tbody>
         </table>

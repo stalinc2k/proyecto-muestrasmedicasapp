@@ -12,7 +12,7 @@
             </div>
         @endif
         <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
-            <x-expensecomponents.modal-new-expense :visitors="$visitors" :products="$products" />
+            <x-expensecomponents.modal-new-expense />
             <h3 class="text-3xl font-bold dark:text-white">Administración Egresos</h3>
         </div>
         <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
@@ -78,5 +78,5 @@
 
         </table>
     </div>
-    @include('incomes.script')
+    @include('expenses.script')
 @endsection

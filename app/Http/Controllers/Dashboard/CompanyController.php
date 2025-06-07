@@ -24,8 +24,9 @@ class CompanyController extends Controller
         return view('dashboard.companies.index', compact('companies'));
     }
 
-    public function companyPdf(Income $entry){
-        $pdf = Pdf::loadView('dashboard.incomes.listpdf', compact('entry'));
+    public function companyPdf(){
+        $companies = Company::orderBy('code', 'asc')->get();
+        $pdf = Pdf::loadView('dashboard.companies.listpdf', compact('companies'));
         return $pdf->stream('list_company.pdf');
 
     }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code', 20);
             $table->date('initlot');
-            $table->date('finishtlot');
+            $table->date('finishlot');
             $table->foreignId('user_id')->constrained();
             
             $table->timestamps();
