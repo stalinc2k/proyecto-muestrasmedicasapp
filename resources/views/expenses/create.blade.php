@@ -12,7 +12,7 @@
             </div>
         @endif
     </div>
-    <div class="flex w-fullbg-gray-900 bg-opacity-50 p-20 ">
+    <div class="flex w-fullbg-gray-900 bg-opacity-50 p-10 ">
         <div class="bg-white w-1/2 p-4 rounded-2xl">
             <h3 class="text-1xl text-center m-2 uppercase font-bold dark:text-white">datos salida</h3>
             <div>
@@ -152,7 +152,11 @@
                             <button type="button" onclick="cancelar()"
                                 class="m-2 bg-orange-600 font-semibold text-white p-2 rounded-md">Cancelar
                             </button>
+<<<<<<< HEAD
                             <button type="submit"
+=======
+                            <button type="submit" id="create"
+>>>>>>> fbcd445da583f6c38e6cc25b83c4b45a0801170b
                                 class="m-2 bg-green-600 font-semibold text-white p-2 rounded-md">Crear Salida
                             </button>
                     </div>
@@ -189,7 +193,6 @@
             let i = id - 1;
             let restante = 0;
             const btnAsignar = document.getElementById('asignar-' + id);
-            const cantidadInput = document.getElementById('cantidad-' + id);
             const idPro = document.getElementById('idprod-' + id);
             const descPro = document.getElementById('descprod-' + id);
             const idLot = document.getElementById('idbatch-' + id);
@@ -201,7 +204,7 @@
             const stock = parseInt(columnas[5].textContent);
             const codigoP = columnas[1].textContent;
             const tabla = document.getElementById('datosAsignados').getElementsByTagName('tbody')[0];
-            const cantidad = parseInt(cantidadInput.value);
+            const cantidad = parseInt(document.getElementById('cantidad-' + id).value);
 
             if (isNaN(cantidad) || cantidad <= 0) {
                 alert("Por favor ingresa una cantidad válida.");
@@ -242,8 +245,7 @@
 
             actualizarStock(id, restante);
             eliminar.innerHTML =
-                `<button class="btn-eliminar" onclick="eliminarFila(this, ${id}, ${stock}, ${unidades},${cantidad})">Eliminar</button>`;
-            cantidadInput.value = 0;
+                `<button class="btn-eliminar" onclick="eliminarFila(this, ${id})">Eliminar</button>`;
         }
 
         function actualizarStock(index, stock) {
@@ -255,16 +257,19 @@
             colStock.textContent = stock;
         }
 
-        function eliminarFila(boton, index, stock, totU, cant) {
+        function eliminarFila(boton, index) {
             index--;
             const tablaLotes = document.querySelector('#tablaLotes tbody');
             const filas = tablaLotes.getElementsByTagName('tr');
             const columnas = filas[index].getElementsByTagName('td');
             const colStock = columnas[5];
             const totalU = document.querySelector('#totalUnidades');
-            totU = totU - cant;
-            colStock.textContent = stock;
-            totalU.textContent = totU;
+            console.log(filas);
+            console.log(columnas);
+            console.log(colStock.textContent);
+            console.log(totalU.textContent);
+            
+
 
             document.querySelector('#datosAsignados').addEventListener('click', function(event) {
                 // Verificamos si el clic fue en un botón "Eliminar"

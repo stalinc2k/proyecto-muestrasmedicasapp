@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Models\Expense;
 use App\Models\Income;
 use App\Models\Inventory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,6 +25,11 @@ Route::get('/dashboard', function () {
 Route::get('/inventory', function () {
     return view('inventory');
 })->middleware(['auth', 'verified'])->name('inventory');
+
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect('/');
+})->middleware(['auth', 'verified']);
 
 
 Route::middleware(['auth'])->group(function () {
