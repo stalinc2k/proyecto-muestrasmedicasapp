@@ -142,9 +142,16 @@ class ExpenseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Expense $expense)
+    public function destroy(Expense $expense, Request $request)
     {
-        //
+        $this->authorize('delete', $expense);
+        $page = $request->input('page', 1);
+
+        $expense->delete();
+       
+        return redirect()
+            ->route('expense.index', ['page' => $page])
+            ->with('success', 'Salida Eliminada.');
     }
 }
 

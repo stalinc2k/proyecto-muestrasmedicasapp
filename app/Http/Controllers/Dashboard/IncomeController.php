@@ -43,7 +43,8 @@ class IncomeController extends Controller
      */
     public function create()
     {
-        
+        $proveedores = Company::orderBy('code', 'asc')->get();
+        return view('incomes.create', compact('proveedores'));
     }
 
     public function getProducts($company_id){

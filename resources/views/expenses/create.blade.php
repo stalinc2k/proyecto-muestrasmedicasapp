@@ -114,17 +114,20 @@
                         </table>
                     </div>
                     <div class="mt-10">
-                        <label for="observations" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Observaciones</label>
-                        <textarea id="observations" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Escribe tus observaciones..."></textarea>
+                        <label for="observations"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Observaciones</label>
+                        <textarea id="observations" rows="2"
+                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Escribe tus observaciones..."></textarea>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <div class=" w-1/2 ml-4 rounded-2xl bg-white" id="asignaciones">
             <h3 class="text-1xl text-center m-2 uppercase font-bold dark:text-white">DETALLES</h3>
             <div class="p-4">
-                <form action="{{route('expense.store')}}" method="Post" id="formularioExpense">
+                <form action="{{ route('expense.store') }}" method="Post" id="formularioExpense">
                     @csrf
                     <table id="datosAsignados" class="w-full text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-white uppercase bg-blue-700 dark:bg-gray-700 dark:text-gray-400">
@@ -137,10 +140,10 @@
                                 <th scope="col" class="p-1">Vto</th>
                                 <th scope="col" class="p-1">Cantidad</th>
                                 <th scope="col" class="p-1">Acción</th>
+                                <th scope="col" class="p-1 hidden">IndexLotes</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <input type="hidden" name="datos" id="datos">
                         </tbody>
                     </table>
                     <hr class="mt-2">
@@ -149,16 +152,12 @@
                         <p id="totalUnidades" class="">0</p>
                     </div>
                     <div>
-                            <button type="button" onclick="cancelar()"
-                                class="m-2 bg-orange-600 font-semibold text-white p-2 rounded-md">Cancelar
-                            </button>
-<<<<<<< HEAD
-                            <button type="submit"
-=======
-                            <button type="submit" id="create"
->>>>>>> fbcd445da583f6c38e6cc25b83c4b45a0801170b
-                                class="m-2 bg-green-600 font-semibold text-white p-2 rounded-md">Crear Salida
-                            </button>
+                        <button type="button" onclick="cancelar()"
+                            class="m-2 bg-orange-600 font-semibold text-white p-2 rounded-md">Cancelar
+                        </button>
+                        <button type="submit" id="create"
+                            class="m-2 bg-green-600 font-semibold text-white p-2 rounded-md">Crear Salida
+                        </button>
                     </div>
                 </form>
             </div>
@@ -183,8 +182,8 @@
 
         });
 
-        function cancelar(){
-            window.location.href = "{{route('expense.index')}}";
+        function cancelar() {
+            window.location.href = "{{ route('expense.index') }}";
         }
 
 
@@ -229,6 +228,9 @@
             const celdaVence = fila.insertCell(5);
             const celdaCantidad = fila.insertCell(6);
             const eliminar = fila.insertCell(7);
+            const filaLotes = fila.insertCell(8);
+            filaLotes.classList.add('hidden');
+
             const totalU = document.querySelector('#totalUnidades');
 
 
@@ -239,13 +241,14 @@
             celdaLote.textContent = codLot.value;
             celdaVence.textContent = venLot.value;
             celdaCantidad.textContent = cantidad;
+            filaLotes.textContent = i;
             restante = stock - cantidad;
             const unidades = parseInt(totalU.textContent) + cantidad;
             totalU.textContent = unidades;
 
             actualizarStock(id, restante);
             eliminar.innerHTML =
-                `<button class="btn-eliminar" onclick="eliminarFila(this, ${id})">Eliminar</button>`;
+                `<button class="btn-eliminar">Eliminar</button>`
         }
 
         function actualizarStock(index, stock) {
@@ -257,31 +260,34 @@
             colStock.textContent = stock;
         }
 
-        function eliminarFila(boton, index) {
-            index--;
-            const tablaLotes = document.querySelector('#tablaLotes tbody');
-            const filas = tablaLotes.getElementsByTagName('tr');
-            const columnas = filas[index].getElementsByTagName('td');
-            const colStock = columnas[5];
-            const totalU = document.querySelector('#totalUnidades');
-            console.log(filas);
-            console.log(columnas);
-            console.log(colStock.textContent);
-            console.log(totalU.textContent);
-            
-
-
             document.querySelector('#datosAsignados').addEventListener('click', function(event) {
                 // Verificamos si el clic fue en un botón "Eliminar"
                 if (event.target && event.target.matches('.btn-eliminar')) {
                     // Seleccionamos la fila que contiene el botón
                     const fila = event.target.closest('tr');
+                    
+                    const tablaLotes = document.querySelector('#tablaLotes tbody');
+                    const index = parseInt(fila.cells[8].textContent);
+                    const filas = tablaLotes.getElementsByTagName('tr');
+                    const columnas = filas[index].getElementsByTagName('td');
+                    const colStock = columnas[5];
+                    const stockF = parseInt(colStock.textContent);
+                    const totalU = document.querySelector('#totalUnidades');
+                    
 
+                    const cantidad = parseInt(fila.cells[6].textContent);
+                    colStock.textContent = stockF + cantidad;
+
+                    const unidades = parseInt(totalU.textContent) - cantidad;
+                    totalU.textContent = unidades;
+
+                    if(unidades == 0){
+                        desbloquearVisitador();
+                    }
                     // Eliminamos la fila
                     fila.remove();
                 }
             });
-        }
 
         function bloquearVisitador() {
             const select = document.getElementById('visitor_id');
@@ -291,55 +297,61 @@
 
         }
 
-        document.querySelector('#formularioExpense').addEventListener('submit', function (e) {
-    e.preventDefault(); // Detiene el envío automático del formulario
+        function desbloquearVisitador() {
+            const select = document.getElementById('visitor_id');
+            select.disabled = false;
+            const enviar = document.getElementById('create');
+            enviar.disabled = true;
 
-    const tablaDatosEnvio = document.querySelector('#datosAsignados tbody');
-    const rows = tablaDatosEnvio.getElementsByTagName('tr');
-    const idv = parseInt(document.getElementById('visitor_id').value);
-    const date = document.getElementById('expensedate').value;
-    const obs = document.getElementById('observations').value;
-    const formulario = document.getElementById("formularioExpense");
-
-    if (rows.length < 1) {
-        alert('No se ha ingresado detalles');
-        return;
-    }
-
-    if (isNaN(idv) || idv < 1) {
-        alert('No se ha escogido Representante');
-        return;
-    }
-
-    for (let i = 0; i < rows.length; i++) {
-        const cols = rows[i].getElementsByTagName('td');
-        const idp = parseInt(cols[0].textContent);
-        const idl = parseInt(cols[3].textContent);
-        const cnt = parseInt(cols[6].textContent);
-
-        console.log(idp, idl, cnt, idv, date, obs);
-
-        // Función para crear y agregar un input hidden
-        function crearInputOculto(name, value) {
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = name;
-            input.value = value;
-            formulario.appendChild(input);
         }
 
-        crearInputOculto(`productos[${i}][id_pro]`, idp);
-        crearInputOculto(`productos[${i}][id_lot]`, idl);
-        crearInputOculto(`productos[${i}][id_vis]`, idv);
-        crearInputOculto(`productos[${i}][cant]`, cnt);
-        crearInputOculto(`productos[${i}][date]`, date);
-        crearInputOculto(`productos[${i}][obs]`, obs);
-    }
+        document.querySelector('#formularioExpense').addEventListener('submit', function(e) {
+            e.preventDefault(); // Detiene el envío automático del formulario
 
-    // Enviamos el formulario solo una vez
-    formulario.submit();
-});
+            const tablaDatosEnvio = document.querySelector('#datosAsignados tbody');
+            const rows = tablaDatosEnvio.getElementsByTagName('tr');
+            const idv = parseInt(document.getElementById('visitor_id').value);
+            const date = document.getElementById('expensedate').value;
+            const obs = document.getElementById('observations').value;
+            const formulario = document.getElementById("formularioExpense");
 
-       
+            if (rows.length < 1) {
+                alert('No se ha ingresado detalles');
+                return;
+            }
+
+            if (isNaN(idv) || idv < 1) {
+                alert('No se ha escogido Representante');
+                return;
+            }
+
+            for (let i = 0; i < rows.length; i++) {
+                const cols = rows[i].getElementsByTagName('td');
+                const idp = parseInt(cols[0].textContent);
+                const idl = parseInt(cols[3].textContent);
+                const cnt = parseInt(cols[6].textContent);
+
+                console.log(idp, idl, cnt, idv, date, obs);
+
+                // Función para crear y agregar un input hidden
+                function crearInputOculto(name, value) {
+                    const input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = name;
+                    input.value = value;
+                    formulario.appendChild(input);
+                }
+
+                crearInputOculto(`productos[${i}][id_pro]`, idp);
+                crearInputOculto(`productos[${i}][id_lot]`, idl);
+                crearInputOculto(`productos[${i}][id_vis]`, idv);
+                crearInputOculto(`productos[${i}][cant]`, cnt);
+                crearInputOculto(`productos[${i}][date]`, date);
+                crearInputOculto(`productos[${i}][obs]`, obs);
+            }
+
+            // Enviamos el formulario solo una vez
+            formulario.submit();
+        });
     </script>
 @endsection
