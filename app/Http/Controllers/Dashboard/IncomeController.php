@@ -59,28 +59,28 @@ class IncomeController extends Controller
         $this->authorize('create', Income::class);
 
         $request->validate([
-            'entrydate' => 'required|date',
+            'date' => 'required|date',
             'productos' => 'required|array|min:1',
-            'productos.*.company_id' => 'required|exists:companies,id',
-            'productos.*.product_id' => 'required|exists:products,id',
-            'productos.*.cantinventory' => 'required|integer|min:1',
-            'productos.*.codelot' => 'required|string|min:5',
-            'productos.*.initlot' => 'required|date',
-            'productos.*.finishlot' => 'required|date|after:today',
+            'productos.*.id_com' => 'required|exists:companies,id',
+            'productos.*.id_pro' => 'required|exists:products,id',
+            'productos.*.cant' => 'required|integer|min:1',
+            'productos.*.co_lot' => 'required|string|min:5',
+            'productos.*.fela' => 'required|date',
+            'productos.*.fven' => 'required|date|after:today',
         ]);
     
         DB::beginTransaction();
     
         try {
             // Usamos el primer proveedor de los productos (se asume que todos son del mismo proveedor)
-            $companyId = $request->productos[0]['company_id'];
-            $totalUnits = collect($request->productos)->sum('cantinventory');
+            $companyId = $request->productos[0]['id_com'];
+            $totalUnits = collect($request->productos)->sum('cant');
     
             // Creamos la cabecera (Income)
             $income = Income::create([
                 'user_id' => Auth::id(),
                 'company_id' => $companyId,
-                'entrydate' => $request->entrydate,
+                'entrydate' => $request->date,
                 'totalunits' => $totalUnits,
                 'observations' => $request->observations,
             ]);
@@ -92,23 +92,23 @@ class IncomeController extends Controller
                 $datos = DB::table('inventories')
                 ->join('products', 'products.id', '=', 'inventories.product_id')
                 ->join('batches', 'batches.id', '=', 'inventories.batch_id')
-                ->where('inventories.product_id', $item['product_id'])
-                ->where('batches.code', $item['codelot'])
+                ->where('inventories.product_id', $item['id_pro'])
+                ->where('batches.code', $item['co_lot'])
                 ->exists();
                 if(!$datos){
                     $batch = Batch::create([
-                        'code' => strtoupper($item['codelot']),
-                        'initlot' => $item['initlot'],
-                        'finishlot' => $item['finishlot'],
+                        'code' => strtoupper($item['co_lot']),
+                        'initlot' => $item['fela'],
+                        'finishlot' => $item['fven'],
                         'user_id' => Auth::id(),
                     ]);
                     Inventory::create([
                         'user_id' => Auth::id(),
-                        'product_id' => $item['product_id'],
+                        'product_id' => $item['id_pro'],
                         'income_id' => $income->id,
                         'batch_id' => $batch->id,
-                        'dateinventory' => $request->entrydate,
-                        'cantinventory' => $item['cantinventory'],
+                        'dateinventory' => $request->date,
+                        'cantinventory' => $item['cant'],
                     ]);
                 }
             }
