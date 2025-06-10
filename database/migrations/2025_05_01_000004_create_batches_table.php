@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('initlot');
             $table->date('finishlot');
             $table->foreignId('user_id')->constrained();
-            
+            $table->foreignId('product_id')->constrained();
             $table->timestamps();
             $table->softDeletes('deleted_at')->nullable();
         });

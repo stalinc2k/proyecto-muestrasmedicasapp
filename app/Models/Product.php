@@ -28,4 +28,8 @@ class Product extends Model
     public function inventory(){
         return $this->hasMany(Inventory::class);
     }
+
+    public function batch(){
+        return $this->hasMany(Batch::class);
+    }
 }

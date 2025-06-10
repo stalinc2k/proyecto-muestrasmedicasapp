@@ -57,10 +57,9 @@ class IncomeController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', Income::class);
-
         $request->validate([
-            'date' => 'required|date',
             'productos' => 'required|array|min:1',
+            'productos.*.date' => 'required|date',
             'productos.*.id_com' => 'required|exists:companies,id',
             'productos.*.id_pro' => 'required|exists:products,id',
             'productos.*.cant' => 'required|integer|min:1',
@@ -68,24 +67,29 @@ class IncomeController extends Controller
             'productos.*.fela' => 'required|date',
             'productos.*.fven' => 'required|date|after:today',
         ]);
-    
+        
+        $idcom = $request->productos[0]['id_com'];
+        $date = $request->productos[0]['date'];
+        $obs = $request->productos[0]['obs'];
+
+        $total = 0;
+        foreach ($request->productos as $item) {
+            $total = $total + intval($item['cant']);
+            }
+
         DB::beginTransaction();
     
         try {
-            // Usamos el primer proveedor de los productos (se asume que todos son del mismo proveedor)
-            $companyId = $request->productos[0]['id_com'];
-            $totalUnits = collect($request->productos)->sum('cant');
     
             // Creamos la cabecera (Income)
             $income = Income::create([
                 'user_id' => Auth::id(),
-                'company_id' => $companyId,
-                'entrydate' => $request->date,
-                'totalunits' => $totalUnits,
-                'observations' => $request->observations,
+                'company_id' => $idcom,
+                'entrydate' => $date,
+                'totalunits' => $total,
+                'observations' => $obs,
             ]);
             
-           
             // Guardamos el detalle (Inventories)
             foreach ($request->productos as $item) {
                 //VERIFUCAR SI EXITE PRODUCTO Y LOTE
@@ -94,7 +98,8 @@ class IncomeController extends Controller
                 ->join('batches', 'batches.id', '=', 'inventories.batch_id')
                 ->where('inventories.product_id', $item['id_pro'])
                 ->where('batches.code', $item['co_lot'])
-                ->exists();
+                ->get();
+                dd($datos);
                 if(!$datos){
                     $batch = Batch::create([
                         'code' => strtoupper($item['co_lot']),

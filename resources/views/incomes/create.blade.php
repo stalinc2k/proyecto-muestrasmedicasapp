@@ -12,6 +12,7 @@
             </div>
         @endif
     </div>
+   @include('fragment._errors-form')
 
     <div class="flex w-fullbg-gray-900 bg-opacity-50 p-10 ">
         <div class="bg-white w-1/2 p-4 rounded-2xl">
