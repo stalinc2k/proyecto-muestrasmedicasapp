@@ -23,20 +23,19 @@ class IncomeController extends Controller
 
     public function index()
     {
-        $incomes = Income::orderBy('id','asc')->paginate(10);
+        $incomes = Income::orderBy('id', 'asc')->paginate(10);
         $companies = Company::has('product')->get();
-        return view('incomes.index',compact('incomes','companies'));
-        
+        return view('incomes.index', compact('incomes', 'companies'));
     }
 
 
-    public function entryPdf($id){
+    public function entryPdf($id)
+    {
 
         $id = intval($id);
-        $entry = Income::where('id',$id)->first();
+        $entry = Income::where('id', $id)->first();
         $pdf = Pdf::loadView('incomes.listpdf', compact('entry'));
         return $pdf->stream('entry.pdf');
-
     }
     /**
      * Show the form for creating a new resource.
@@ -47,8 +46,9 @@ class IncomeController extends Controller
         return view('incomes.create', compact('proveedores'));
     }
 
-    public function getProducts($company_id){
-        $products = Product::where('company_id',$company_id)->get();
+    public function getProducts($company_id)
+    {
+        $products = Product::where('company_id', $company_id)->get();
         return response()->json($products);
     }
     /**
@@ -67,7 +67,7 @@ class IncomeController extends Controller
             'productos.*.fela' => 'required|date',
             'productos.*.fven' => 'required|date|after:today',
         ]);
-        
+
         $idcom = $request->productos[0]['id_com'];
         $date = $request->productos[0]['date'];
         $obs = $request->productos[0]['obs'];
@@ -75,51 +75,44 @@ class IncomeController extends Controller
         $total = 0;
         foreach ($request->productos as $item) {
             $total = $total + intval($item['cant']);
-            }
+        }
 
         DB::beginTransaction();
-    
+
         try {
-    
+
             // Creamos la cabecera (Income)
             $income = Income::create([
                 'user_id' => Auth::id(),
-                'company_id' => $idcom,
+                'company_id' => intval($idcom),
                 'entrydate' => $date,
                 'totalunits' => $total,
-                'observations' => $obs,
+                'observations' => strtoupper($obs),
             ]);
-            
             // Guardamos el detalle (Inventories)
             foreach ($request->productos as $item) {
                 //VERIFUCAR SI EXITE PRODUCTO Y LOTE
-                $datos = DB::table('inventories')
-                ->join('products', 'products.id', '=', 'inventories.product_id')
-                ->join('batches', 'batches.id', '=', 'inventories.batch_id')
-                ->where('inventories.product_id', $item['id_pro'])
-                ->where('batches.code', $item['co_lot'])
-                ->get();
-                dd($datos);
-                if(!$datos){
-                    $batch = Batch::create([
-                        'code' => strtoupper($item['co_lot']),
+                $datos = Batch::firstOrCreate(
+                    ['code' => strtoupper($item['co_lot']), 'product_id' => intval($item['id_pro'])],
+                    [
                         'initlot' => $item['fela'],
                         'finishlot' => $item['fven'],
                         'user_id' => Auth::id(),
-                    ]);
-                    Inventory::create([
-                        'user_id' => Auth::id(),
-                        'product_id' => $item['id_pro'],
-                        'income_id' => $income->id,
-                        'batch_id' => $batch->id,
-                        'dateinventory' => $request->date,
-                        'cantinventory' => $item['cant'],
-                    ]);
-                }
+                        'product_id' => intval($item['id_pro'])
+                    ]
+                );
+                Inventory::create([
+                    'user_id' => Auth::id(),
+                    'product_id' => intval($item['id_pro']),
+                    'income_id' => $income->id,
+                    'batch_id' => $datos->id,
+                    'dateinventory' => $date,
+                    'cantinventory' => intval($item['cant']),
+                ]);
             }
-    
+
             DB::commit();
-    
+
             return redirect()->route('income.index')->with('success', 'Entrada registrada correctamente.');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -160,7 +153,7 @@ class IncomeController extends Controller
         $page = $request->input('page', 1);
 
         $income->delete();
-       
+
         return redirect()
             ->route('income.index', ['page' => $page])
             ->with('success', 'Entrada Eliminada.');

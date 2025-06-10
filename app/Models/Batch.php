@@ -13,7 +13,7 @@ class Batch extends Model
     
 
     protected $fillable = [
-        'code', 'initlot', 'finishlot','user_id',
+        'code', 'initlot', 'finishlot','user_id', 'product_id',
     ];
 
     public function user(){

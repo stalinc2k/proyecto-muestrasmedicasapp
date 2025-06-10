@@ -12,7 +12,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class ExpenseController extends Controller
 {
@@ -26,32 +25,32 @@ class ExpenseController extends Controller
         $visitors = Visitor::orderBy('code', 'asc')->get();
         $products = Product::orderBy('code', 'asc')->get();
         $expenses = Expense::orderBy('id', 'asc')->get();
-        return view('expenses.index', compact('expenses','visitors','products'));
+        return view('expenses.index', compact('expenses', 'visitors', 'products'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
-    {   
+    {
         $visitors = Visitor::orderBy('code', 'asc')->get();
         $products = Product::orderBy('code', 'asc')->get();
-        
+
         //BUSCAR STOCKS
         $stocks = Inventory::with(['product', 'batch'])
-        ->select(
-            'product_id',
-            'batch_id',
-            DB::raw("SUM(CASE WHEN income_id IS NOT NULL THEN cantinventory ELSE 0 END) as entradas"),
-            DB::raw("SUM(CASE WHEN expense_id IS NOT NULL THEN cantinventory ELSE 0 END) as salidas"),
-            DB::raw("SUM(CASE WHEN income_id IS NOT NULL THEN cantinventory ELSE 0 END) - 
+            ->select(
+                'product_id',
+                'batch_id',
+                DB::raw("SUM(CASE WHEN income_id IS NOT NULL THEN cantinventory ELSE 0 END) as entradas"),
+                DB::raw("SUM(CASE WHEN expense_id IS NOT NULL THEN cantinventory ELSE 0 END) as salidas"),
+                DB::raw("SUM(CASE WHEN income_id IS NOT NULL THEN cantinventory ELSE 0 END) - 
                      SUM(CASE WHEN expense_id IS NOT NULL THEN cantinventory ELSE 0 END) as stock")
-        )
-        ->groupBy('product_id', 'batch_id')
-        ->havingRaw('stock > 0')
-        ->get();
+            )
+            ->groupBy('product_id', 'batch_id')
+            ->havingRaw('stock > 0')
+            ->get();
 
-        return view('expenses.create',compact('visitors','products', 'stocks'));
+        return view('expenses.create', compact('visitors', 'products', 'stocks'));
     }
 
 
@@ -62,12 +61,11 @@ class ExpenseController extends Controller
         $date = $request->productos[0]['date'];
         $obs = $request->productos[0]['obs'];
 
-       $total = 0;
+        $total = 0;
         foreach ($request->productos as $item) {
             $total = $total + intval($item['cant']);
-           
         }
-        $request -> validate([
+        $request->validate([
             'productos' => 'required|array|min:1',
             'productos.*.id_vis' => 'required|exists:visitors,id',
             'productos.*.id_pro' => 'required|exists:products,id',
@@ -78,9 +76,9 @@ class ExpenseController extends Controller
         ]);
 
         DB::beginTransaction();
-    
+
         try {
-    
+
             $expense = Expense::create([
                 'user_id' => Auth::id(),
                 'visitor_id' => $idvis,
@@ -88,7 +86,7 @@ class ExpenseController extends Controller
                 'totalunits' => $total,
                 'observations' => $obs,
             ]);
-    
+
             foreach ($request->productos as $item) {
                 Inventory::create([
                     'user_id' => Auth::id(),
@@ -99,7 +97,7 @@ class ExpenseController extends Controller
                     'cantinventory' => $item['cant'],
                 ]);
             }
-    
+
             DB::commit();
             return redirect()->route('expense.index')->with('success', 'Salida registrada correctamente.');
         } catch (\Exception $e) {
@@ -107,15 +105,15 @@ class ExpenseController extends Controller
             return back()->with('error', 'Error: ' . $e->getMessage());
         }
     }
-    
 
-    public function expensePdf($id){
+
+    public function expensePdf($id)
+    {
 
         $id = intval($id);
-        $expense = Expense::where('id',$id)->first();
+        $expense = Expense::where('id', $id)->first();
         $pdf = Pdf::loadView('expenses.listpdf', compact('expense'));
         return $pdf->stream('expense.pdf');
-
     }
 
     public function show(Expense $expense)
@@ -148,10 +146,9 @@ class ExpenseController extends Controller
         $page = $request->input('page', 1);
 
         $expense->delete();
-       
+
         return redirect()
             ->route('expense.index', ['page' => $page])
             ->with('success', 'Salida Eliminada.');
     }
 }
-
