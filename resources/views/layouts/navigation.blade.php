@@ -13,7 +13,7 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Administración') }}
+                        {{ __('Módulos') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -21,6 +21,14 @@
                         {{ __('Inventario') }}
                     </x-nav-link>
                 </div>
+                @if (Auth::user()->role == 'admin')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('user')" :active="request()->routeIs('user')">
+                            {{ __('Usuarios') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+                
 
             </div>
 

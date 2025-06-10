@@ -81,20 +81,20 @@ class ExpenseController extends Controller
 
             $expense = Expense::create([
                 'user_id' => Auth::id(),
-                'visitor_id' => $idvis,
+                'visitor_id' => intval($idvis),
                 'deliverydate' => $date,
-                'totalunits' => $total,
-                'observations' => $obs,
+                'totalunits' => intval($total),
+                'observations' => strtoupper($obs),
             ]);
 
             foreach ($request->productos as $item) {
                 Inventory::create([
                     'user_id' => Auth::id(),
-                    'product_id' => $item['id_pro'],
+                    'product_id' => intval($item['id_pro']),
                     'expense_id' => $expense->id,
                     'batch_id' => $item['id_lot'],
                     'dateinventory' => $item['date'],
-                    'cantinventory' => $item['cant'],
+                    'cantinventory' => intval($item['cant']),
                 ]);
             }
 

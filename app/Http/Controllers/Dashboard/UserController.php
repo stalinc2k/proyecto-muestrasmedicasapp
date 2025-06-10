@@ -4,22 +4,31 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    use AuthorizesRequests;
+    
     public function index()
     {
-        $user = User::find(1);
-        dd($user->zone[0]->name);
+        $users = User::orderBy('name','asc')->get();
+        return view('dashboard.users.index',compact('users'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function userPdf(){
+
+        $users = user::orderBy('name', 'asc')->get();
+        $pdf = Pdf::loadView('dashboard.users.listpdf', compact('users'));
+        return $pdf->stream('list_user.pdf');
+
+    }
+
     public function create()
     {
         //
@@ -30,7 +39,32 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $this->authorize('create', User::class);
+        
+        $validator = Validator::make($request->all(),[
+            'name' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('create_user_id', true);
+        }
+
+        $user = User::create([
+            'name' => $request->name,
+            'lastname' => $request->lastname,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        return redirect()
+            ->route('user.index')
+            ->with('success', 'Usuario Creado.');
     }
 
     /**
@@ -54,7 +88,61 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $this->authorize('update', $user);
+        $page = $request->input('page', 1);
+
+        $validator = Validator::make($request->all(),[
+            'name' => ['required', 'string','min:3', 'max:255'],
+            'lastname' => ['required', 'string','min:3', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
+            'role' => ['required', 'string', 'lowercase', 'max:255'],
+        ]);
+        
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('editing_user_id', $user->id);
+        }
+
+        $user->update([
+            'name' => $request->name,
+            'lastname' => $request->lastname,
+            'email' => $request->email,
+            'role' => $request->role,
+        ]);
+
+        return redirect()
+        ->route('user.index')
+        ->with('success', 'Usuario Actualizado.');
+    }
+
+    public function updatePassword(Request $request, User $user)
+    {
+        $this->authorize('update', $user);
+        $page = $request->input('page', 1);
+
+        $validator = Validator::make($request->all(),[
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+        
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('editing_pass_id', $user->id);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()
+        ->route('user.index')
+        ->with('success', 'Constraseña Actualizada.');
+
     }
 
     /**
@@ -62,6 +150,12 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $this->authorize('delete', $user);
+        $user->delete();
+
+        return redirect()
+            ->route('user.index')
+            ->with('success', 'Usuario Eliminado.');
+
     }
 }

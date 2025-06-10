@@ -5,6 +5,7 @@ use App\Http\Controllers\Dashboard\ExpenseController;
 use App\Http\Controllers\Dashboard\IncomeController;
 use App\Http\Controllers\Dashboard\InventoryController;
 use App\Http\Controllers\Dashboard\ProductController;
+use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Dashboard\VisitorController;
 use App\Http\Controllers\Dashboard\ZoneController;
 use App\Http\Controllers\ProfileController;
@@ -25,6 +26,11 @@ Route::get('/dashboard', function () {
 Route::get('/inventory', function () {
     return view('inventory');
 })->middleware(['auth', 'verified'])->name('inventory');
+
+
+Route::get('/user', function () {
+    return view('user');
+})->middleware(['auth', 'verified'])->name('user');
 
 Route::get('/logout', function () {
     Auth::logout();
@@ -59,13 +65,16 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::resource('inventory', InventoryController::class);
     Route::resource('income', IncomeController::class);
     Route::resource('expense', ExpenseController::class);
+    Route::resource('user', UserController::class);
     Route::get('/listzone', [ZoneController::class, 'zonePdf'])->name('listado.zonas');
     Route::get('/listvisitor', [VisitorController::class, 'visitorPdf'])->name('listado.visitadores');
     Route::get('/listcompany', [CompanyController::class, 'companyPdf'])->name('listado.empresas');
     Route::get('/listproduct', [ProductController::class, 'productPdf'])->name('listado.productos');
+    Route::get('/list-users', [UserController::class, 'userPdf'])->name('listado.usuarios');
     Route::get('/listentry/{entry}', [IncomeController::class, 'entryPdf'])->name('income.entry');
     Route::get('/listexpense/{expense}', [ExpenseController::class, 'expensePdf'])->name('expense.pdf');
     Route::get('/listexpense/{expense}', [ExpenseController::class, 'expensePdf'])->name('expense.expense');
+    Route::patch('/passwordUpdate/{user}', [UserController::class, 'updatePassword'])->name('change.pass');
     
 });
 
