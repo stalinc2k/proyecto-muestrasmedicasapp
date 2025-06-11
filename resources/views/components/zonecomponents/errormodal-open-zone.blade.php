@@ -11,7 +11,7 @@
     </script>
 @endif
 
-@if ($errors->any())
+@if ($errors->any() && session('editing_create_id'))
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             const modalId = 'zonaModal';
@@ -27,7 +27,7 @@
 <script>
     
     function cerrarModalPDF() {
-        const modal = document.getElementById('modalPDF'); // <-- esta línea faltaba
+        const modal = document.getElementById('modalPDF'); 
         const iframe = document.getElementById('iframePDF');
         iframe.src = '';
         modal.classList.add('hidden');

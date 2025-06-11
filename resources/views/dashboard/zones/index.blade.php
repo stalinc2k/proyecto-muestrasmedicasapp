@@ -2,14 +2,12 @@
 @section('content')
 <div class="m-8 relative overflow-x-auto shadow-md sm:rounded-lg">
     
-    <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
-        @can('create', App\Models\Zone::class)
-            <x-zonecomponents.modal-new-zone :visitors='$visitors'/>
-        @endcan
-        <x-zonecomponents.listpdf-zone /> 
-        <h3 class="text-3xl font-bold dark:text-white">Administración Zonas</h3>
+    <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 bg-white dark:bg-gray-900">
+            <h3 class="text-3xl font-bold dark:text-white uppercase mt-4">Administración Zonas</h3>
     </div>
-    
+    <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 bg-white dark:bg-gray-900">
+        <x-zonecomponents.modal-share-zone :visitors='$visitors' />
+    </div>
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>

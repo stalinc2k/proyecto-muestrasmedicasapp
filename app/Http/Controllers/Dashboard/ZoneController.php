@@ -18,12 +18,32 @@ class ZoneController extends Controller
      */
     use AuthorizesRequests;
 
-    public function index()
+    public function index(Request $request)
     {
-        $zones = Zone::orderBy('code', 'asc')->paginate(7);
+        /* $zones = Zone::orderBy('code', 'asc')->paginate(7);
         $visitors = Visitor::where('active', true)->orderBy('code', 'asc')->get();
-        return view('dashboard.zones.index',compact('zones','visitors'));
-        
+        return view('dashboard.zones.index',compact('zones','visitors'));*/
+
+        $query = Zone::with(['visitor', 'user']);
+
+        if ($request->filled('buscar')) {
+            $buscar = $request->buscar;
+
+            $query->where('code', 'like', "%{$buscar}%")
+                ->orWhere('name', 'like', "%{$buscar}%")
+                ->orWhereHas('visitor', function ($q) use ($buscar) {
+                    $q->where('name', 'like', "%{$buscar}%");
+                })
+                ->orWhereHas('user', function ($q) use ($buscar) {
+                    $q->where('name', 'like', "%{$buscar}%")
+                        ->orWhere('lastname', 'like', "%{$buscar}%");
+                });
+        }
+
+        $zones = $query->paginate(7); 
+        $visitors = Visitor::all(); 
+
+        return view('dashboard.zones.index', compact('zones', 'visitors'));
     }
 
     /**
@@ -33,7 +53,7 @@ class ZoneController extends Controller
     {
         $visitors = Visitor::where('active', true)->orderBy('code', 'asc');
         $this->authorize('create', Zone::class);
-        return view('dashboard.zones.create',compact('visitors'));
+        return view('dashboard.zones.create', compact('visitors'));
     }
 
     /**
@@ -42,12 +62,22 @@ class ZoneController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', Zone::class);
-        $request->all();
-        $request->validate([
+
+        $validator = Validator::make($request->all(), [
             'code' => 'required|min:4|max:4|unique:zones',
             'name' => 'required|min:4|max:150',
             'visitor_id' => 'integer',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('editing_create_id', true);
+        }
+
+
         Zone::create([
             'code' => strtoupper($request->code),
             'name' => strtoupper($request->name),
@@ -58,12 +88,12 @@ class ZoneController extends Controller
         return to_route('zone.index');
     }
 
-    public function zonePdf(){
+    public function zonePdf()
+    {
 
         $zones = Zone::orderBy('code', 'asc')->get();
         $pdf = Pdf::loadView('dashboard.zones.listpdf', compact('zones'));
         return $pdf->stream('list_zones.pdf');
-
     }
 
 
@@ -79,7 +109,7 @@ class ZoneController extends Controller
     {
         $this->authorize('update', $zone);
         $visitors = Visitor::all();
-        return view('dashboard.zones.edit', compact('zone','visitors'));
+        return view('dashboard.zones.edit', compact('zone', 'visitors'));
     }
 
     /**
@@ -94,7 +124,7 @@ class ZoneController extends Controller
             'name' => 'required|min:4|max:150',
             'visitor_id' => 'integer',
         ]);
-    
+
         if ($validator->fails()) {
             return redirect()
                 ->back()
@@ -102,12 +132,12 @@ class ZoneController extends Controller
                 ->withInput()
                 ->with('editing_zone_id', $zone->id);
         }
-    
+
         $zone->update([
             'name' => strtoupper($request->name),
             'visitor_id' => intval($request->visitor_id),
         ]);
-    
+
         return redirect()
             ->route('zone.index', ['page' => $page])
             ->with('success', 'Zona actualizada correctamente.');
@@ -119,10 +149,10 @@ class ZoneController extends Controller
     public function destroy(Request $request, Zone $zone)
     {
         $this->authorize('delete', $zone);
-        $page = $request->input('page',1);
+        $page = $request->input('page', 1);
         $zone->delete();
         return redirect()
-        ->route('zone.index',['page' => $page])
-        ->with('success', 'Zona eliminada correctamente.');
+            ->route('zone.index', ['page' => $page])
+            ->with('success', 'Zona eliminada correctamente.');
     }
 }
