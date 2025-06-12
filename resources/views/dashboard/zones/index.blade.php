@@ -1,6 +1,6 @@
 @extends('dashboard.master')
 @section('content')
-<div class="m-8 relative overflow-x-auto shadow-md sm:rounded-lg">
+<div class="m-8 relative overflow-x-auto shadow-md sm:rounded-lg bg-white p-4">
     
     <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 bg-white dark:bg-gray-900">
             <h3 class="text-3xl font-bold dark:text-white uppercase mt-4">Administración Zonas</h3>
@@ -8,8 +8,8 @@
     <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 bg-white dark:bg-gray-900">
         <x-zonecomponents.modal-share-zone :visitors='$visitors' />
     </div>
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <table class="w-full mt-4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs bg-blue-700 text-gray-700 uppercase  dark:bg-gray-700 dark:text-gray-400 text-white">
             <tr>
                 
                 <th scope="col" class="px-6 py-3">
