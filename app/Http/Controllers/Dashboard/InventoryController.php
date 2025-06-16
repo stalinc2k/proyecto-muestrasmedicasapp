@@ -17,9 +17,22 @@ class InventoryController extends Controller
      */
     use SoftDeletes;
     use AuthorizesRequests;
-    public function index()
+    public function index(Request $request)
     {
-        $inventories = Inventory::groupBy('id')->paginate(7);
+        $query = Inventory::with(['user', 'product']);
+
+        if ($request->filled('buscar')){
+            $buscar = $request->buscar;
+            $query->where('dateinventory', 'like', "%{$buscar}%")
+            ->orWhereHas('product', function ($q) use ($buscar) {
+                $q->where('description', 'like', "%{$buscar}%")
+                    ->orWhere('code', 'like', "%{$buscar}%");
+            });
+        }
+
+
+
+        $inventories = $query->paginate(7);
         return view('inventories.index', compact('inventories'));
     }
 

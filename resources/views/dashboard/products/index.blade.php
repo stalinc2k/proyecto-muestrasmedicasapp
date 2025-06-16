@@ -2,17 +2,15 @@
 
 @section('content')
 
-<div class="m-8 relative overflow-x-auto shadow-md sm:rounded-lg">
+<div class="m-8 relative overflow-x-auto shadow-md sm:rounded-lg bg-white p-4">
     <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
-        @can('create', App\Models\Product::class)
-            <x-productcomponents.modal-new-product :companies='$companies' />
-        @endcan
-        <x-productcomponents.listpdf-product />
-        <h3 class="text-3xl font-bold dark:text-white">Administración Productos</h3>
+      <h3 class="text-3xl font-bold mt-2 uppercase dark:text-white">Administración Productos</h3>
     </div>
-    
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 bg-white dark:bg-gray-900">
+        <x-productcomponents.modal-share-product :products='$products' :companies='$companies' />
+    </div>
+    <table class="w-full mt-4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs bg-blue-700 uppercase  dark:bg-gray-700 dark:text-gray-400 text-white">
             <tr>
                 
                 <th scope="col" class="px-6 py-3">

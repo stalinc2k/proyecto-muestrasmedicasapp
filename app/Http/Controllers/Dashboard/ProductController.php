@@ -19,10 +19,23 @@ class ProductController extends Controller
      */
     use AuthorizesRequests;
 
-    public function index()
+    public function index(Request $request)
     {
+        $query = Product::with(['user']);
+
+        if ($request->filled('buscar')){
+            $buscar = $request->buscar;
+            $query->where('code', 'like', "%{$buscar}%")
+            ->orWhere('description', 'like', "%{$buscar}%")
+            ->orWhere('barcode', 'like', "%{$buscar}%")
+            ->orWhereHas('user', function ($q) use ($buscar) {
+                $q->where('name', 'like', "%{$buscar}%")
+                    ->orWhere('lastname', 'like', "%{$buscar}%");
+            });
+        }
+
         $companies = Company::orderBy('code', 'asc')->get();
-        $products = Product::orderBy('code', 'asc')->paginate(7);
+        $products = $query->paginate(7);
         return view('dashboard.products.index', compact('products', 'companies'));
     }
 

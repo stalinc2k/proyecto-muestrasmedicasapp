@@ -21,10 +21,23 @@ class IncomeController extends Controller
      */
     use AuthorizesRequests;
 
-    public function index()
+    public function index(Request $request)
     {
-        $incomes = Income::orderBy('id', 'asc')->paginate(10);
-        $companies = Company::has('product')->get();
+        $query = Income::with(['user','company']);
+
+        if ($request->filled('buscar')){
+            $buscar = $request->buscar;
+            $query->where('id', 'like', "%{$buscar}%")
+            ->orWhereDate('entrydate', 'like', "%{$buscar}%")
+            ->orWhereHas('company', function ($q) use ($buscar) {
+                $q->where('name', 'like', "%{$buscar}%")
+                    ->orWhere('code', 'like', "%{$buscar}%");
+            });
+        }
+
+
+        $incomes = $query->paginate(10);
+        $companies = Company::orderBy('code', 'asc')->get();
         return view('incomes.index', compact('incomes', 'companies'));
     }
 

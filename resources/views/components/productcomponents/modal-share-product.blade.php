@@ -1,10 +1,10 @@
-@props(['visitors'])
+@props(['products', 'companies'])
 <div class="w-full bg-white flex items-center justify-center p-2">
-    @can('create', App\Models\Zone::class)
-        <x-zonecomponents.modal-new-zone :visitors='$visitors'/>
+    @can('create', App\Models\Product::class)
+        <x-productcomponents.modal-new-product :companies='$companies' />
     @endcan
-    <x-zonecomponents.listpdf-zone /> 
-    <form method="GET" action="{{ route('zone.index') }}" class="flex w-full max-w-xl gap-2 ">
+    <x-productcomponents.listpdf-product />
+    <form method="GET" action="{{ route('product.index') }}" class="flex w-full max-w-xl gap-2 ">
         <input
             type="text"
             name="buscar"

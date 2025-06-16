@@ -9,7 +9,7 @@
         <x-zonecomponents.modal-share-zone :visitors='$visitors' />
     </div>
     <table class="w-full mt-4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs bg-blue-700 text-gray-700 uppercase  dark:bg-gray-700 dark:text-gray-400 text-white">
+        <thead class="text-xs bg-blue-700 uppercase  dark:bg-gray-700 dark:text-gray-400 text-white">
             <tr>
                 
                 <th scope="col" class="px-6 py-3">

@@ -18,9 +18,23 @@ class CompanyController extends Controller
      */
     use AuthorizesRequests;
 
-    public function index()
+    public function index(Request $request)
     {
-        $companies = Company::orderBy('code', 'asc')->paginate(7);
+        $query = Company::with(['user']);
+
+        if ($request->filled('buscar')){
+            $buscar = $request->buscar;
+            $query->where('code', 'like', "%{$buscar}%")
+            ->orWhere('name', 'like', "%{$buscar}%")
+            ->orWhere('ruc', 'like', "%{$buscar}%")
+            ->orWhere('address', 'like', "%{$buscar}%")
+            ->orWhereHas('user', function ($q) use ($buscar) {
+                $q->where('name', 'like', "%{$buscar}%")
+                    ->orWhere('lastname', 'like', "%{$buscar}%");
+            });
+        }
+
+        $companies = $query->paginate(7);
         return view('dashboard.companies.index', compact('companies'));
     }
 

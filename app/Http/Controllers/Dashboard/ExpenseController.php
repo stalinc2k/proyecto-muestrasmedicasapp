@@ -20,12 +20,24 @@ class ExpenseController extends Controller
      */
     use AuthorizesRequests;
 
-    public function index()
+    public function index(Request $request)
     {
+        $query = Expense::with(['user','visitor']);
+
+        if ($request->filled('buscar')){
+            $buscar = $request->buscar;
+            $query->where('id', '=', "%{$buscar}%")
+            ->orWhereDate('deliverydate', 'like', "%{$buscar}%")
+            ->orWhereHas('visitor', function ($q) use ($buscar) {
+                $q->where('name', 'like', "%{$buscar}%")
+                    ->orWhere('code', 'like', "%{$buscar}%");
+            });
+        }
+
+
         $visitors = Visitor::orderBy('code', 'asc')->get();
-        $products = Product::orderBy('code', 'asc')->get();
-        $expenses = Expense::orderBy('id', 'asc')->get();
-        return view('expenses.index', compact('expenses', 'visitors', 'products'));
+        $expenses = $query->get();
+        return view('expenses.index', compact('expenses', 'visitors'));
     }
 
     /**

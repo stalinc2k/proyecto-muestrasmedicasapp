@@ -1,7 +1,7 @@
 @extends('dashboard.master')
 
 @section('content')
-    <div class="m-10 relative overflow-x-auto shadow-md sm:rounded-lg">
+<div class="m-8 relative overflow-x-auto shadow-md sm:rounded-lg bg-white p-4">
         @if(session('error'))
             <div>
                 {{ session('error') }}
@@ -12,18 +12,13 @@
             </div>
         @endif
         <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
-            <x-expensecomponents.modal-new-expense />
             <h3 class="text-3xl font-bold dark:text-white">Administración Egresos</h3>
         </div>
-        <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
-            <input type="text" id="table-search"
-                    class="m-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-96
-                         bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
-                         dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Buscar por número de salida">
-            </div>
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 bg-white dark:bg-gray-900">
+            <x-expensecomponents.modal-share-expense :expenses='$expenses'/>
+        </div>
+        <table class="w-full mt-4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs bg-blue-700 uppercase  dark:bg-gray-700 dark:text-gray-400 text-white">
                 <tr>
                     <th scope="col" class="px-6 py-3">
                         Numero Salida
