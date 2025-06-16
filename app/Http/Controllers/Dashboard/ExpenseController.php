@@ -49,7 +49,7 @@ class ExpenseController extends Controller
         $products = Product::orderBy('code', 'asc')->get();
 
         //BUSCAR STOCKS
-        $stocks = Inventory::with(['product', 'batch'])
+        $stocks = Inventory::with(['product', 'batch', 'company'])
             ->select(
                 'product_id',
                 'batch_id',

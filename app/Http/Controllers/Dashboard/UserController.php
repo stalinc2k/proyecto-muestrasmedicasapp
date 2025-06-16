@@ -15,9 +15,18 @@ class UserController extends Controller
 {
     use AuthorizesRequests;
     
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::orderBy('name','asc')->get();
+        $query = User::orderBy('name','asc');
+
+        if ($request->filled('buscar')){
+            $buscar = $request->buscar;
+            $query->where('name', 'like', "%{$buscar}%")
+            ->orWhere('lastname', 'like', "%{$buscar}%")
+            ->orWhere('email', 'like', "%{$buscar}%")
+            ->orWhere('role', 'like', "%{$buscar}%");
+        }
+        $users = $query->paginate(7);
         return view('dashboard.users.index',compact('users'));
     }
 

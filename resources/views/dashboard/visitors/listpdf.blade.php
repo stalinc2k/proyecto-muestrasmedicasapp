@@ -54,7 +54,7 @@
       #info th{
           text-align: right;
       }    
-      </style>
+    </style>
 </head>
 <body>
     <div>

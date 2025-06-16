@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\BatchController;
 use App\Http\Controllers\Dashboard\CompanyController;
 use App\Http\Controllers\Dashboard\ExpenseController;
 use App\Http\Controllers\Dashboard\IncomeController;
@@ -66,10 +67,12 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::resource('income', IncomeController::class);
     Route::resource('expense', ExpenseController::class);
     Route::resource('user', UserController::class);
+    Route::resource('batch', BatchController::class);
     Route::get('/listzone', [ZoneController::class, 'zonePdf'])->name('listado.zonas');
     Route::get('/listvisitor', [VisitorController::class, 'visitorPdf'])->name('listado.visitadores');
     Route::get('/listcompany', [CompanyController::class, 'companyPdf'])->name('listado.empresas');
     Route::get('/listproduct', [ProductController::class, 'productPdf'])->name('listado.productos');
+    Route::get('/listbatch', [BatchController::class, 'batchPdf'])->name('listado.lotes');
     Route::get('/list-users', [UserController::class, 'userPdf'])->name('listado.usuarios');
     Route::get('/listentry/{entry}', [IncomeController::class, 'entryPdf'])->name('income.entry');
     Route::get('/listexpense/{expense}', [ExpenseController::class, 'expensePdf'])->name('expense.pdf');
