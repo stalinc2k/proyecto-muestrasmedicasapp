@@ -18,7 +18,7 @@
                     <input type="password" id="password" name="password" value="{{ old('password') }}" autocomplete="new-password"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Contraseña">
+                            placeholder="Contraseña" required minlength="8" maxlength="32">
                 </div>
                 <div class="col-span-2 mt-2">
                     <label for="password_confirmation"
@@ -26,7 +26,7 @@
                     <input type="password" id="password_confirmation" name="password_confirmation" value="{{ old('password_confirmation') }}" autocomplete="new-password"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Confirmar contraseña">
+                            placeholder="Confirmar ontraseña" required minlength="8" maxlength="32">>
                 </div>
                 <div class="flex justify-end gap-2 mt-2">
                     <input type="hidden" name="page" value="{{ request('page', 1) }}">

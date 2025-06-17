@@ -28,7 +28,7 @@
                         <input type="text" name="name" value="{{old('name', $visitor->name)}}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Nombres y apellidos Representante" required>
+                                placeholder="Nombres y apellidos del representante" minlength="10" maxlength="150" required>
                     </div>
 
                     <div class="col-span-2">
@@ -48,7 +48,7 @@
                         <input type="number" name="phone" value="{{old('phone', $visitor->phone)}}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Telefono Celular">
+                                placeholder="Numero celular" minlength="10" maxlength="13">
                     </div>
                     <div class="col-span-2">
                         <label class="inline-flex items-center cursor-pointer">

@@ -36,9 +36,7 @@
 
                 @yield('content')
             </main>
-            <x-footer-application>
-                
-            </x-footer-application>
+            <x-footer-application />
         </div>
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     </body>

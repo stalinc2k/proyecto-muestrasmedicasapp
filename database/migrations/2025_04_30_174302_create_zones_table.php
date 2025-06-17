@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('phone', 10)->nullable();
             $table->boolean('active')->default(true);
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained()->onDelete('restrict');
             
             $table->timestamps();
             $table->softDeletes('deleted_at')->nullable();
@@ -28,8 +28,8 @@ return new class extends Migration
             $table->id();
             $table->string('code', 4)->unique();
             $table->string('name', 50);
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('visitor_id')->nullable()->constrained();
+            $table->foreignId('user_id')->constrained()->onDelete('restrict');
+            $table->foreignId('visitor_id')->nullable()->constrained()->onDelete('restrict');
             $table->timestamps();
             $table->softDeletes('deleted_at')->nullable();
         });

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('incomes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('company_id')->constrained();
+            $table->foreignId('user_id')->constrained()->onDelete('restrict');
+            $table->foreignId('company_id')->constrained()->onDelete('restrict');
             $table->date('entrydate');
             $table->integer('totalunits');
             $table->text('observations')->nullable();

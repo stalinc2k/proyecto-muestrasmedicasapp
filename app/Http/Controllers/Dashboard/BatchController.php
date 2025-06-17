@@ -8,6 +8,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -55,7 +56,35 @@ class BatchController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', Batch::class);
+        $page = $request->input('page', 1);
+
+        $validator = Validator::make($request->all(), [
+            'code' => 'required|min:5',
+            'initlot' => 'required|date',
+            'finishlot' => 'date|required|after:today',
+            'product_id' => 'required|integer'
+        ]);
+    
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('create_batch_id', true);
+        }
+
+            Batch::create([
+            'code' => strtoupper($request->code),
+            'initlot' => $request->initlot,
+            'finishlot' => $request->finishlot,
+            'product_id' => intval($request->product_id),
+            'user_id' => Auth::id(),
+            ]);
+    
+        return redirect()
+            ->route('batch.index', ['page' => $page])
+            ->with('success', 'Lote creado correctamente.');
     }
 
     /**
@@ -94,7 +123,7 @@ class BatchController extends Controller
                 ->back()
                 ->withErrors($validator)
                 ->withInput()
-                ->with('editing_bacth_id', $batch->id);
+                ->with('editing_batch_id', $batch->id);
         }
 
             $batch->update([
@@ -112,8 +141,15 @@ class BatchController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Batch $batch)
+    public function destroy(Request $request, Batch $batch)
     {
-        //
+        $this->authorize('delete', $batch);
+        $page = $request->input('page', 1);
+
+        $batch->delete();
+
+        return redirect()
+            ->route('batch.index', ['page' => $page])
+            ->with('success', 'Lote Eliminada.');
     }
 }

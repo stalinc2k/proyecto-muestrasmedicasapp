@@ -48,9 +48,6 @@
         
 
     </div>
-    <x-footer-application>
-        
-    </x-footer-application>
-
+    <x-footer-application />
 </x-app-layout>
 

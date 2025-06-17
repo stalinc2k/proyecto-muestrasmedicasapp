@@ -18,14 +18,14 @@
                         <input type="text" name="code" value="{{old('code')}}" id="code"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Example AMC 1" maxlength="5" required>
+                                placeholder="Example AMC 1" minlength="5" maxlength="5" required>
                     </div>
                     <div class="col-span-2">
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombres y Apellidos</label>
                         <input type="text" id="name" name="name" value="{{old('name')}}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Nombres y apellidos del representante" required>
+                                placeholder="Nombres y apellidos del representante" minlength="10" maxlength="150" required>
                     </div>
 
                     <div class="col-span-2">
@@ -41,7 +41,7 @@
                         <input type="number" id="phone" name="phone" value="{{old('phone')}}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Numero celular">
+                                placeholder="Numero celular" minlength="10" maxlength="13">
                     </div>
                     <div class="col-span-2 sm:col-span-2">
                        

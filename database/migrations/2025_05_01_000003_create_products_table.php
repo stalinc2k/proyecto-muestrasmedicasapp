@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('description', 100);
             $table->string('barcode', 50)->nullable();
             $table->string('image')->nullable();
-            $table->foreignId('company_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('company_id')->constrained()->onDelete('restrict');
+            $table->foreignId('user_id')->constrained()->onDelete('restrict');
             $table->timestamps();
             $table->softDeletes('deleted_at')->nullable();
         });

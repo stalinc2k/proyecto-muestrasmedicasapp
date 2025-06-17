@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
-use App\Models\Income;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
@@ -59,15 +58,22 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', Company::class);
-        $request->all();
 
-        $request->validate(
+        $validator = Validator::make($request->all(),
             [
-             'code' => 'required|min:11|max:14|unique:companies',
+             'code' => 'required|min:11|max:14|unique:companies|regex:/^P/i',
              'ruc' => 'required|min:10|max:13',
              'name' => 'required|min:5|max:150',
             ]
         );
+
+        if($validator->fails()){
+            return redirect()
+            ->back()
+            ->withErrors($validator)
+            ->withInput()
+            ->with('create_company_id',true);
+        }
 
         Company::create(
             [
@@ -80,7 +86,9 @@ class CompanyController extends Controller
             ]
         );
 
-        return redirect()->route('company.index')->with('success', 'Empresa creada correctamente');
+        return redirect()
+            ->route('company.index')
+            ->with('success', 'Empresa creada correctamente.');
     }
 
     /**
@@ -144,6 +152,6 @@ class CompanyController extends Controller
        
         return redirect()
             ->route('company.index', ['page' => $page])
-            ->with('success', 'Empresa actualizada correctamente.');
+            ->with('success', 'Empresa eliminada correctamente.');
     }
 }

@@ -4,9 +4,14 @@
 @section('content')
 <div class="m-8 relative overflow-x-auto shadow-md sm:rounded-lg bg-white p-4">
         @if(session('error'))
+            <div id="alert" class=" text-white bg-red-500 font-bold p-4">
                 {{ session('error') }}
-        @else
+            </div>
+        @endif
+        @if(session('success'))
+            <div id="alert" class=" text-white bg-green-500 font-bold p-4">
                 {{ session('success') }}
+            </div>
         @endif
         <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 bg-white dark:bg-gray-900">
             
@@ -132,6 +137,19 @@
 @endif
 
 <script>
+
+     // Ocultar el mensaje después de 3 segundos (3000 ms)
+     setTimeout(() => {
+        const alert = document.getElementById('alert');
+        if (alert) {
+            alert.style.transition = "opacity 0.5s ease-out";
+            alert.style.opacity = 0;
+
+            // Opcional: quitar el elemento del DOM después de la animación
+            setTimeout(() => alert.remove(), 500);
+        }
+    }, 3000);
+
     
     function cerrarModalPDF() {
         const modal = document.getElementById('modalPDF'); // <-- esta línea faltaba

@@ -55,14 +55,22 @@ class VisitorController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', Visitor::class);
-        $request->all();
 
-        $request->validate(
+        $validator = Validator::make($request->all(),
             [
              'code' => 'required|min:5|max:5|unique:visitors',
              'name' => 'required|min:5|max:150',
             ]
         );
+
+        
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('create_visitor_id', true);
+        }
 
         Visitor::create(
             [
@@ -74,7 +82,7 @@ class VisitorController extends Controller
             ]
         );
 
-        return redirect()->route('visitor.index')->with('success', 'Visitador creado correctamente');
+        return redirect()->route('visitor.index')->with('success', 'Representante creado correctamente');
     }
 
     /**
@@ -103,7 +111,7 @@ class VisitorController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:5|max:150',
-            'active' => 'integer'
+            'active' => 'integer',
         ]);
         if ($validator->fails()) {
             return redirect()

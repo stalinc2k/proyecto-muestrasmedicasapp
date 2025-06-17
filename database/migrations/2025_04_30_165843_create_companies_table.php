@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('phone', 10)->nullable();
             $table->string('ruc', 13);
             $table->enum('type',['major','supplier'])->default('supplier');
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained()->onDelete('restrict');
             $table->timestamps();
             $table->softDeletes('deleted_at')->nullable();
         });

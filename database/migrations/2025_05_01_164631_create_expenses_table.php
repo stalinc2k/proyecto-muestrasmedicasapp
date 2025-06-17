@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('visitor_id')->constrained();
+            $table->foreignId('user_id')->constrained()->onDelete('restrict');
+            $table->foreignId('visitor_id')->constrained()->onDelete('restrict');
             $table->date('deliverydate');
             $table->integer('totalunits');
             $table->text('observations')->nullable();

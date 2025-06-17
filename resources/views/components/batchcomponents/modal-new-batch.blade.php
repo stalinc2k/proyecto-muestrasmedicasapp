@@ -48,7 +48,7 @@
                             @endforeach
                     </select>
                 </div>
-
+                <input type="hidden" name="page" value="{{ request('page', 1) }}">
                     <div class="flex justify-end gap-2 mt-2">
                         <a onclick="cerrarModal('batchModalNew')"
                             class="bg-orange-500 text-white px-4 py-2 rounded cursor-pointer">Cancelar</a>

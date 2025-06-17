@@ -16,7 +16,7 @@
                     <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Nombres y apellidos del representante" required>
+                            placeholder="Nombres Usuario" required minlength="3" maxlength="100" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo letras y espacios">
                 </div>
                 <div class="col-span-2 mt-2">
                     <label for="lastname"
@@ -24,7 +24,7 @@
                     <input type="text" id="lastname" name="lastname" value="{{ old('lastname', $user->lastname) }}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Nombres y apellidos del representante" required>
+                            placeholder="Apellidos Usuario" required minlength="3" maxlength="100" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo letras y espacios">
                 </div>
 
                 <div class="col-span-2 mt-2">
@@ -33,7 +33,7 @@
                     <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                             dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="example@example.com">
+                        placeholder="example@example.com" required>
                 </div>
 
                 <div class="col-span-2 mt-2">

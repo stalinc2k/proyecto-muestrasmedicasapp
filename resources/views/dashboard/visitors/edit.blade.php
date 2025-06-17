@@ -2,6 +2,7 @@
 
 @section('content')
 
+
 @include('fragment._errors-form')
 <h1>Editar registro visitador</h1>
 <form action="{{route('visitor.update',$visitor->id)}}" method="POST">

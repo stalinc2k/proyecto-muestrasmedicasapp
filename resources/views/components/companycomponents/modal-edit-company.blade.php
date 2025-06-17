@@ -16,7 +16,7 @@
                         <input type="text" name="code" value="{{old('code',$company->code)}}" id="code"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Example P(RUC) - P000000000000" maxlength="14" readonly>
+                                placeholder="Example P(RUC) - P000000000000" maxlength="14" readonly title="Debe empezar con P seguido del RUC o CI">
                     </div>
 
                     <div class="col-span-2">
@@ -24,7 +24,7 @@
                         <input type="text" name="ruc" value="{{old('ruc',$company->ruc)}}" id="ruc"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Example 151713681931001" maxlength="13" required>
+                                placeholder="Example 151713681931001" pattern="[0-9]{13}" title="Unicamente dígitos numéricos" minlength="10" maxlength="13" required>
                     </div>
 
                     <div class="col-span-2">
@@ -32,7 +32,7 @@
                         <input type="text" id="name" name="name" value="{{old('name',$company->name)}}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Nombre o Razon Social" required>
+                                placeholder="Nombre o Razon Social" minlength="5" maxlength="150" required>
                     </div>
 
                     <div class="col-span-2">
@@ -40,15 +40,15 @@
                         <input type="text" id="address" name="address" value="{{old('address',$company->address)}}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Dirección compania">
+                                placeholder="Dirección compania" minlength="5" maxlength="150">
                     </div>
 
                     <div class="col-span-2">
                         <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Celular</label>
-                        <input type="number" id="phone" name="phone" value="{{old('phone',$company->phone)}}"
+                        <input type="tel" id="phone" name="phone" value="{{old('phone',$company->phone)}}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Numero celular" maxlength="13">
+                                placeholder="Número celular" minlength="10" maxlength="13">
                     </div>
                     <div class="col-span-2 sm:col-span-2">
                         <label for="small" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tipo</label>

@@ -54,9 +54,10 @@ class UserController extends Controller
         $validator = Validator::make($request->all(),[
             'name' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'email', 'regex:/^[^@]+@(outlook\.com|admin\.com|user\.com|hotmail\.com|yahoo\.com|gmail\.com)$/i', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+
         if ($validator->fails()) {
             return redirect()
                 ->back()
@@ -65,9 +66,9 @@ class UserController extends Controller
                 ->with('create_user_id', true);
         }
 
-        $user = User::create([
-            'name' => $request->name,
-            'lastname' => $request->lastname,
+        User::create([
+            'name' => strtoupper($request->name),
+            'lastname' => strtoupper($request->lastname),
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -103,7 +104,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(),[
             'name' => ['required', 'string','min:3', 'max:255'],
             'lastname' => ['required', 'string','min:3', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
+            'email' => ['required', 'email', 'regex:/^[^@]+@(outlook\.com|admin\.com|user\.com|hotmail\.com|yahoo\.com|gmail\.com)$/i', 'lowercase', 'email', 'max:255'],
             'role' => ['required', 'string', 'lowercase', 'max:255'],
         ]);
         
@@ -116,8 +117,8 @@ class UserController extends Controller
         }
 
         $user->update([
-            'name' => $request->name,
-            'lastname' => $request->lastname,
+            'name' => strtoupper($request->name),
+            'lastname' => strtoupper($request->lastname),
             'email' => $request->email,
             'role' => $request->role,
         ]);
