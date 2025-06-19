@@ -59,7 +59,6 @@
                         <img class="flex max-w-[335px]" src="{{asset('img/logos/logo_nombre.jpeg')}}" alt="" srcset="">
                     </div>
                 </div>
-                
             </main>
         </div>
 

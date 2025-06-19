@@ -7,7 +7,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
         </svg>
     </button>
-    <div id="companyModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 items-center justify-center hidden z-50">
+    <div id="companyModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 items-center justify-center hidden z-50 overflow-y-auto">
         <div class="bg-white p-6 rounded-xl shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">Nueva Empresa</h2>
             @include('fragment._errors-form')
