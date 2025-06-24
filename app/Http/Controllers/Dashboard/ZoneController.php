@@ -64,8 +64,8 @@ class ZoneController extends Controller
         $this->authorize('create', Zone::class);
 
         $validator = Validator::make($request->all(), [
-            'code' => 'required|min:4|max:4|unique:zones',
-            'name' => 'required|min:4|max:150',
+            'code' => 'required|integer|min:1|max:9999|unique:zones',
+            'name' => 'required|min:5|max:150',
             'visitor_id' => 'integer',
         ]);
 
@@ -74,7 +74,7 @@ class ZoneController extends Controller
                 ->back()
                 ->withErrors($validator)
                 ->withInput()
-                ->with('editing_create_id', true);
+                ->with('create_zone_id', true);
         }
 
 

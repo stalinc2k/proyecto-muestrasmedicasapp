@@ -4,61 +4,56 @@
     <title>Listado de Productos</title>
     <style>
         body {
-            font-family: DejaVu Sans, sans-serif;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        thead {
-            background-color: #11662a;
-            /* Indigo-600 */
-            color: white;
-        }
-
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 5px;
-            text-align: left;
-        }
-
-        .logo {
-            width: 50px;
-            height: 50px;
-        }
-
-        .nombre {
-            width: 150px;
-            height: 50px;
-        }
-
-        footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 50px;
-            color: #11662a;
-            text-align: center;
-            /* Centrar el texto */
-        }
-
-        #info {
-            width: 20px;
-            padding: 1px;
-            border-style: none;
-        }
-
-        #info th,
-        #info td {
-            border: none;
-        }
-
-        #info th {
-            text-align: right;
-        }
+              font-family: DejaVu Sans, sans-serif;
+          }
+  
+          table {
+              width: 100%;
+              border-collapse: collapse;
+          }
+  
+          thead {
+              background-color: #11662a; /* Indigo-600 */
+              color: white;
+          }
+  
+          th, td {
+              border: 1px solid #ccc;
+              padding: 5px;
+              text-align: left;
+          }
+  
+          .logo{
+              width: 50px;
+              height: 50px;
+          }
+          .nombre{
+              width: 150px;
+              height: 50px;
+          }
+  
+          footer {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 50px;
+          color:#11662a;
+          text-align: center; /* Centrar el texto */
+      }
+      #info{
+          width: 20px;
+          padding: 1px;
+          border-style: none;
+      }
+  
+      #info th,
+          #info td {
+              border: none;
+          }
+  
+      #info th{
+          text-align: right;
+      }    
     </style>
 </head>
 <body>

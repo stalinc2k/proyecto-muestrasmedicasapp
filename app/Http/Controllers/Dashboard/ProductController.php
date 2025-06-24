@@ -64,11 +64,18 @@ class ProductController extends Controller
     {
         $this->authorize('create', Product::class);
         
-        $request->validate([
+        $validator = Validator::make($request->all(),[
             'code' => 'required|min:5|max:5|unique:products',
             'description' => 'required|min:5|max:150',
             'company_id' => 'required|integer',
         ]);
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('create_product_id', true);
+        }
 
         // Guardar la imagen
         if($request->image){
