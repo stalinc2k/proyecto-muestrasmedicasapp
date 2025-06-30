@@ -38,7 +38,7 @@ class InventoryController extends Controller
 
      public function inventoryPdf(){
 
-        $inventories = Inventory::orderBy('dateinventory', 'asc')->get();
+        $inventories = Inventory::orderBy('id', 'asc')->get();
         $pdf = Pdf::loadView('inventories.listpdf', compact('inventories'));
         return $pdf->stream('list_inventory.pdf');
 

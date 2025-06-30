@@ -167,7 +167,7 @@
     function abrirModalPDF(entry) {
         const iframe = document.getElementById('iframePDF');
         const modal = document.getElementById('modalPDF');
-        const url = '{{ route('income.entry', ['entry' => ':entry']) }}'.replace(':entry', entry);
+        const url = '{{route('kardex.general')}};
         iframe.src = url;
         modal.classList.remove('hidden');
         modal.classList.add('flex');

@@ -101,7 +101,8 @@
     <table>
         <thead>
             <tr>
-                <th>Codigo</th>
+                <th>Código</th>
+                <th>Ruc</th>
                 <th>Razon Soocial</th>
                 <th>Dirección</th>
                 <th>Teléfono</th>
@@ -111,7 +112,10 @@
         <tbody>
             @foreach ($companies as $company)
                 <tr>
-                    <td>{{ $company->code}}
+                    <td>
+                        {{ $company->code}}
+                    </td>
+                    <td>
                         {{ $company->ruc}}
                     </td>
                     <td>{{ $company->name}}</td>

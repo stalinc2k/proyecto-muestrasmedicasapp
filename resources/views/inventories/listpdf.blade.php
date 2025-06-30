@@ -95,7 +95,7 @@
     
     </div>
     <h2>
-        LISTADO DE ZONA CON SUS REPRESENTANTES
+        LISTADO MOVIMIENTOS KARDEX
     </h2>
     <table>
         <thead>
@@ -109,12 +109,14 @@
         <tbody>
             @foreach ($inventories as $inventory)
                 <tr>
+                    <td>
                     <div class="text-base font-semibold">
                         {{$inventory->dateinventory}}
                         <div class="font-normal text-gray-500">
                             {{$inventory->income_id ? 'Entrada': 'Salida'}}
                         </div>
                     </div>
+                    </td>
                     <td class="px-6 py-4">
                     {{$inventory->income_id ?? $inventory->expense_id}}
                     </td>

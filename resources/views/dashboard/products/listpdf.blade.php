@@ -96,6 +96,7 @@
         <thead>
             <tr>
                 <th>Codigo</th>
+                <th>Proveedor</th>
                 <th>Descripción</th>
                 <th>Código de barras</th>
                 <th>Imagen</th>
@@ -105,6 +106,8 @@
             @foreach ($products as $product)
                 <tr>
                     <td>{{ $product->code}}
+                    </td>
+                    <td>
                         {{ $product->company->name}}
                     </td>
                     <td>{{ $product->description}}</td>
