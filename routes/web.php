@@ -55,6 +55,7 @@ Route::middleware(['auth'])->prefix('inventories')->group(function () {
 Route::get('/productos/{company}', [IncomeController::class, 'getProducts'])->middleware('auth');
 Route::get('/inventories/stock/{product}', [InventoryController::class, 'getStock'])->middleware('auth');
 Route::post('/expense', [ExpenseController::class, 'store'])->middleware('auth');
+Route::get('/listbatch', [BatchController::class, 'batchPdf'])->name('listado.lotes')->middleware('auth');
 
 
 
@@ -72,7 +73,6 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::get('/listvisitor', [VisitorController::class, 'visitorPdf'])->name('listado.visitadores');
     Route::get('/listcompany', [CompanyController::class, 'companyPdf'])->name('listado.empresas');
     Route::get('/listproduct', [ProductController::class, 'productPdf'])->name('listado.productos');
-    Route::get('/listbatch', [BatchController::class, 'batchPdf'])->name('listado.lotes');
     Route::get('/list-users', [UserController::class, 'userPdf'])->name('listado.usuarios');
     Route::get('/listentry/{entry}', [IncomeController::class, 'entryPdf'])->name('income.entry');
     Route::get('/listexpense/{expense}', [ExpenseController::class, 'expensePdf'])->name('expense.pdf');

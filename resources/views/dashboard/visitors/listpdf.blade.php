@@ -53,7 +53,10 @@
   
       #info th{
           text-align: right;
-      }    
+      }
+      .page-break {
+        page-break-after: always;
+    }   
     </style>
 </head>
 <body>
@@ -91,6 +94,7 @@
     <h2>
         LISTADO DE VISITADORES CON SUS ZONAS
     </h2>
+    @foreach ($visitors->chunk(10) as $chunk)
     <table>
         <thead>
             <tr>
@@ -103,7 +107,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($visitors as $visitor)
+            @foreach ($chunk as $visitor)
                 <tr>
                     <td>{{ $visitor->code}}</td>
                     <td>{{ $visitor->name }}</td>
@@ -126,6 +130,10 @@
             @endforeach
         </tbody>
     </table>
+    @if (!$loop->last)
+        <div class="page-break"></div>
+    @endif
+    @endforeach
     <footer>
         <p>Copyright &copy; {{ $anio }}. Todos los derechos reservados.</p>
     </footer>

@@ -60,6 +60,9 @@
         #info th {
             text-align: right;
         }
+        .page-break {
+        page-break-after: always;
+    }
     </style>
 </head>
 
@@ -101,25 +104,29 @@
     <h2>
         LISTADO DE ZONA CON SUS REPRESENTANTES
     </h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Codigo</th>
-                <th>Descripcion</th>
-                <th>Representante</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($zones as $zone)
+    @foreach ($zones->chunk(10) as $chunk)
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ $zone->code }}</td>
-                    <td>{{ $zone->name }}</td>
-                    <td>{{ $zone->visitor->name }}</td>
+                    <th>Codigo</th>
+                    <th>Descripcion</th>
+                    <th>Representante</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
-
+            </thead>
+            <tbody>
+                @foreach ($chunk as $zone)
+                    <tr>
+                        <td>{{ $zone->code }}</td>
+                        <td>{{ $zone->name }}</td>
+                        <td>{{ $zone->visitor->name }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        @if (!$loop->last)
+            <div class="page-break"></div>
+        @endif
+        @endforeach
     <footer>
         <p>Copyright &copy; {{ $anio }}. Todos los derechos reservados.</p>
     </footer>

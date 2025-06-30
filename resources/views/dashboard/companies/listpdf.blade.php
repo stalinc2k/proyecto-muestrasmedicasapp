@@ -59,6 +59,9 @@
         #info th {
             text-align: right;
         }
+        .page-break {
+        page-break-after: always;
+    }
     </style>
 
 </head>
@@ -98,6 +101,7 @@
     <h2>
         LISTADO DE EMPRESAS
     </h2>
+    @foreach ($companies->chunk(10) as $chunk)
     <table>
         <thead>
             <tr>
@@ -110,7 +114,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($companies as $company)
+            @foreach ($chunk as $company)
                 <tr>
                     <td>
                         {{ $company->code}}
@@ -132,6 +136,10 @@
             @endforeach
         </tbody>
     </table>
+    @if (!$loop->last)
+        <div class="page-break"></div>
+    @endif
+    @endforeach
     <footer>
         <p>Copyright &copy; {{ $anio }}. Todos los derechos reservados.</p>
     </footer>

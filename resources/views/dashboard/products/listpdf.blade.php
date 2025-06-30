@@ -54,6 +54,9 @@
       #info th{
           text-align: right;
       }    
+      .page-break {
+        page-break-after: always;
+    }
     </style>
 </head>
 <body>
@@ -92,6 +95,7 @@
     <h2>
         LISTADO DE PPRODUCTOS
     </h2>
+    @foreach ($products->chunk(10) as $chunk)
     <table>
         <thead>
             <tr>
@@ -103,7 +107,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($products as $product)
+            @foreach ($chunk as $product)
                 <tr>
                     <td>{{ $product->code}}
                     </td>
@@ -124,6 +128,10 @@
             @endforeach
         </tbody>
     </table>
+    @if (!$loop->last)
+        <div class="page-break"></div>
+    @endif
+    @endforeach
     <footer>
         <p>Copyright &copy; {{ $anio }}. Todos los derechos reservados.</p>
     </footer>

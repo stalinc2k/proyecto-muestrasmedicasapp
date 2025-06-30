@@ -13,6 +13,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class IncomeController extends Controller
 {
@@ -31,8 +32,11 @@ class IncomeController extends Controller
             ->orWhereDate('entrydate', 'like', "%{$buscar}%")
             ->orWhereHas('company', function ($q) use ($buscar) {
                 $q->where('name', 'like', "%{$buscar}%")
-                    ->orWhere('code', 'like', "%{$buscar}%");
+                    ->orWhere('code', 'like', "%{$buscar}%")
+                    ->orWhere('observations', 'like', "%{$buscar}%");
+
             });
+           
         }
 
 
@@ -70,7 +74,8 @@ class IncomeController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', Income::class);
-        $request->validate([
+
+        $validator = Validator::make($request->all(),[
             'productos' => 'required|array|min:1',
             'productos.*.date' => 'required|date',
             'productos.*.id_com' => 'required|exists:companies,id',
@@ -80,6 +85,14 @@ class IncomeController extends Controller
             'productos.*.fela' => 'required|date',
             'productos.*.fven' => 'required|date|after:today',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('create_income_id', true);
+        }
 
         $idcom = $request->productos[0]['id_com'];
         $date = $request->productos[0]['date'];

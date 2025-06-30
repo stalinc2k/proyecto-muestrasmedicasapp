@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Listado de Usuarios</title>
+    <title>Listado de Lotes</title>
     <style>
         body {
               font-family: DejaVu Sans, sans-serif;
@@ -53,7 +53,10 @@
   
       #info th{
           text-align: right;
-      }    
+      } 
+      .page-break {
+        page-break-after: always;
+    }   
     </style>
 </head>
 <body>
@@ -89,26 +92,41 @@
         </div>
     </div>
     <h2>
-        LISTADO DE USUARIOS
+        LISTADO DE LOTES REGISTRADOS
     </h2>
+    @foreach ($batches->chunk(15) as $chunk)
     <table>
         <thead>
             <tr>
-                <th>Nombres</th>
-                <th>Email</th>
-                <th>Rol</th>
+                <th>CÓDIGO LOTE</th>
+                <th>F. ELAB.</th>
+                <th>F. VENC.</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($users as $user)
+            @foreach ($chunk as $batch)
                 <tr>
-                    <td>{{ $user->name .' ' .$user->lastname}}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->role }}</td>
+                    <td>
+                        <div>
+                        {{ $batch->code}}
+                        </div>
+                        <div>
+                            {{$batch->product->description}}
+                        </div>    
+                        <div>
+                            {{$batch->product->company->name}}
+                        </div>    
+                    </td>
+                    <td>{{ $batch->initlot }}</td>
+                    <td>{{ $batch->finishlot }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+    @if (!$loop->last)
+        <div class="page-break"></div>
+    @endif
+    @endforeach
     <footer>
         <p>Copyright &copy; {{ $anio }}. Todos los derechos reservados.</p>
     </footer>

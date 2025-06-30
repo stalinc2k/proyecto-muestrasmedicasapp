@@ -1,18 +1,7 @@
 @extends('dashboard.master')
 
 @section('content')
-    <div>
-        @if (session('error'))
-            <div>
-                {{ session('error') }}
-            </div>
-        @else
-            <div>
-                {{ session('success') }}
-            </div>
-        @endif
-    </div>
-    <div class="flex w-fullbg-gray-900 bg-opacity-50 p-10 ">
+    <div class="flex w-fullbg-gray-900 bg-opacity-50 p-10">
         <div class="bg-white w-1/2 p-4 rounded-2xl">
             <h3 class="text-1xl text-center m-2 uppercase font-bold dark:text-white">datos salida</h3>
             <div>
@@ -46,7 +35,7 @@
                             placeholder="Buscar en la tabla">
                     </div>
                     <hr>
-                    <div class="w-full overflow-y-auto overflow-x-auto mt-2">
+                    <div class="w-full overflow-y-auto overflow-x-auto mt-2 h-96">
                         <table id="tablaLotes" class="w-full text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-white uppercase bg-gray-700 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>

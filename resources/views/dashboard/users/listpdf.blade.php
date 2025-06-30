@@ -54,6 +54,9 @@
       #info th{
           text-align: right;
       }    
+      .page-break {
+        page-break-after: always;
+    }
     </style>
 </head>
 <body>
@@ -91,6 +94,7 @@
     <h2>
         LISTADO DE USUARIOS
     </h2>
+    @foreach ($users->chunk(10) as $chunk)
     <table>
         <thead>
             <tr>
@@ -100,7 +104,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($users as $user)
+            @foreach ($chunk as $user)
                 <tr>
                     <td>{{ $user->name .' ' .$user->lastname}}</td>
                     <td>{{ $user->email }}</td>
@@ -109,6 +113,10 @@
             @endforeach
         </tbody>
     </table>
+    @if (!$loop->last)
+        <div class="page-break"></div>
+    @endif
+    @endforeach
     <footer>
         <p>Copyright &copy; {{ $anio }}. Todos los derechos reservados.</p>
     </footer>

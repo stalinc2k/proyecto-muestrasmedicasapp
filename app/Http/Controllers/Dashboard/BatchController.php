@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Batch;
 use App\Models\Inventory;
 use App\Models\Product;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,13 @@ class BatchController extends Controller
      * Display a listing of the resource.
      */
     use AuthorizesRequests;
+
+    public function batchPdf(){
+        $batches = Batch::orderBy('code', 'asc')->get();
+        $pdf = Pdf::loadView('dashboard.batches.listpdf', compact('batches'));
+        return $pdf->stream('ListBatches.pdf');
+    }
+
 
     public function index()
     {

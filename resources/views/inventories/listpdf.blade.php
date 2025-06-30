@@ -59,6 +59,9 @@
         #info th {
             text-align: right;
         }
+        .page-break {
+        page-break-after: always;
+    }
     </style>
 </head>
 <body>
@@ -97,6 +100,7 @@
     <h2>
         LISTADO MOVIMIENTOS KARDEX
     </h2>
+    @foreach ($inventories->chunk(10) as $chunk)
     <table>
         <thead>
             <tr>
@@ -107,7 +111,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($inventories as $inventory)
+            @foreach ($chunk as $inventory)
                 <tr>
                     <td>
                     <div class="text-base font-semibold">
@@ -133,6 +137,10 @@
             @endforeach
         </tbody>
     </table>
+    @if (!$loop->last)
+        <div class="page-break"></div>
+    @endif
+    @endforeach
     <footer>
         <p>Copyright &copy; {{ $anio }}. Todos los derechos reservados.</p>
     </footer>

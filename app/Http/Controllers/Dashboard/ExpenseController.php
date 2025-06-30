@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ExpenseController extends Controller
 {
@@ -49,7 +50,7 @@ class ExpenseController extends Controller
         $products = Product::orderBy('code', 'asc')->get();
 
         //BUSCAR STOCKS
-        $stocks = Inventory::with(['product', 'batch', 'company'])
+        $stocks = Inventory::with(['product', 'batch'])
             ->select(
                 'product_id',
                 'batch_id',
@@ -77,7 +78,7 @@ class ExpenseController extends Controller
         foreach ($request->productos as $item) {
             $total = $total + intval($item['cant']);
         }
-        $request->validate([
+        $validator = Validator::make($request->all(),[
             'productos' => 'required|array|min:1',
             'productos.*.id_vis' => 'required|exists:visitors,id',
             'productos.*.id_pro' => 'required|exists:products,id',
@@ -86,6 +87,13 @@ class ExpenseController extends Controller
             'productos.*.date' => 'required|date',
 
         ]);
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('create_expense_id', true);
+        }
 
         DB::beginTransaction();
 
