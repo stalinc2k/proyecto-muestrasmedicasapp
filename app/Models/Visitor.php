@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Visitor extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
     protected $fillable = [
         'code', 'name', 'email', 'phone', 'user_id'
