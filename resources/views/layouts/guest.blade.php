@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'SWMM HPDK') }}</title>
+        <title>{{ config('app.name', 'SWMM') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -19,7 +19,7 @@
             <div>
                 <a href="/">
                     <div class="flex items-center justify-center pt-2">
-                        <img width="150px" src="{{asset('img/logos/logo.jpeg')}}" alt="" srcset="">
+                        <img width="150px" src="{{asset('img/logos/Logo_secundario.png')}}" alt="" srcset="">
                     </div>
                 </a>
             </div>

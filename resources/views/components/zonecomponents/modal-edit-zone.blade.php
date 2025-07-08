@@ -20,7 +20,7 @@
                                 placeholder="Ejemplo 3004" max="9999" readonly>
                     </div>
                     <div class="col-span-2">
-                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripción</label>
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">* Descripción</label>
                         <input type="text" name="name" value="{{old('name', $zone->name)}}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500
                                 focus:border-blue-500 block w-full p-2.5
@@ -29,7 +29,7 @@
                                 placeholder="Describa el nombre de la zona" minlength="5" maxlength="150" required>
                     </div>
                     <div class="col-span-2 sm:col-span-2">
-                        <label for="visitor_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Representante</label>
+                        <label for="visitor_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccione Representante</label>
                         <select id="visitor_id" name="visitor_id"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500
                                 focus:border-blue-500 block w-full p-2.5

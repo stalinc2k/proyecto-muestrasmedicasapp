@@ -14,7 +14,7 @@
         @endif
         <div
             class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
-            <h3 class="text-3xl font-bold mt-2 uppercase dark:text-white">Administración Empresas</h3>
+            <h3 class="text-3xl font-bold mt-2 uppercase dark:text-white">Administración Proveedores</h3>
         </div>
         <div
             class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 bg-white dark:bg-gray-900">

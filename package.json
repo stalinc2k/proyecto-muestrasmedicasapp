@@ -19,5 +19,11 @@
     },
     "dependencies": {
         "flowbite": "^3.1.2"
-    }
+    },
+    
+    "browserslist": [
+        "last 2 versions",
+        "> 1%",
+        "not dead"
+      ]
 }

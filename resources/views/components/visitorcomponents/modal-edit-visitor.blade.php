@@ -23,7 +23,7 @@
 
                     <div class="col-span-2">
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Nombres y Apellidos
+                            * Nombres y Apellidos
                         </label>
                         <input type="text" name="name" value="{{old('name', $visitor->name)}}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5

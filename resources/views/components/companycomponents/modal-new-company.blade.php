@@ -9,14 +9,14 @@
     </button>
     <div id="companyModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 items-center justify-center hidden z-50 overflow-y-auto">
         <div class="bg-white p-6 rounded-xl shadow-lg w-96">
-            <h2 class="text-xl font-bold mb-4">Nueva Empresa</h2>
+            <h2 class="text-xl font-bold mb-4">Nuevo Proveedor</h2>
             @include('fragment._errors-form')
             <form id="formcompanyNew" action="{{ route('company.store') }}" method="POST">
                 @csrf
                 <div class="grid gap-4 mb-4 grid-cols-2">
                     <div class="col-span-2">
                         <label for="code"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Código</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">* Código</label>
                         <input type="text" name="code" value="{{ old('code') }}" id="code"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -25,7 +25,7 @@
 
                     <div class="col-span-2">
                         <label for="ruc"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ruc</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">* Ruc</label>
                         <input type="text" name="ruc" value="{{ old('ruc') }}" id="ruc"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="col-span-2">
-                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Razón
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">* Razón
                             Social</label>
                         <input type="text" id="name" name="name" value="{{ old('name') }}"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5

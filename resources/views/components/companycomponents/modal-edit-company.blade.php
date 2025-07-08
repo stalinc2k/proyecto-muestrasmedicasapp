@@ -5,7 +5,7 @@
         class="text-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-sm rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500 cursor-pointer">Editar</a>
     <div id="companyModalEdit-{{$companyId}}" class="fixed inset-0 min-h-full bg-gray-900 bg-opacity-50 items-center justify-center hidden z-50 overflow-y-auto">
         <div class="bg-white p-6 rounded-xl shadow-lg w-96">
-            <h2 class="text-xl font-bold mb-4">Editar Empresa</h2>
+            <h2 class="text-xl font-bold mb-4">Editar Proveedor</h2>
             @include('fragment._errors-form')
             <form id="formCompanyEdit-{{$companyId}}" action="{{route('company.update',$company)}}" method="POST" >
                 @csrf
@@ -20,7 +20,7 @@
                     </div>
 
                     <div class="col-span-2">
-                        <label for="ruc" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ruc</label>
+                        <label for="ruc" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">* Ruc</label>
                         <input type="text" name="ruc" value="{{old('ruc',$company->ruc)}}" id="ruc"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="col-span-2">
-                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Razón Social</label>
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">* Razón Social</label>
                         <input type="text" id="name" name="name" value="{{old('name',$company->name)}}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
