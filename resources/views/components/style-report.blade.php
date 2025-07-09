@@ -66,4 +66,16 @@
     .page-break {
     page-break-after: always;
     }
+
+    #pie_firmas{
+        padding: 5px;
+        margin-top: 15px;
+        width: 50%;
+    }
+
+    #pie_firmas th{
+        background-color: white;
+        color: gray;
+        font-weight: 100;
+    }
 </style>
