@@ -2,16 +2,7 @@
 
 @section('content')
     <div class="m-8 relative overflow-x-auto shadow-md sm:rounded-lg bg-white p-4">
-        @if (session('error'))
-            <div id="alert" class=" text-white bg-red-500 font-bold p-4">
-                {{ session('error') }}
-            </div>
-        @endif
-        @if (session('success'))
-            <div id="alert" class=" text-white bg-green-500 font-bold p-4">
-                {{ session('success') }}
-            </div>
-        @endif
+       <x-message-errors/>
         <div
             class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
             <h3 class="text-3xl font-bold mt-2 uppercase dark:text-white">Administración Proveedores</h3>

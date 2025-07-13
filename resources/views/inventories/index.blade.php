@@ -1,15 +1,7 @@
 @extends('dashboard.master')
 @section('content')
     <div class="m-8 relative overflow-x-auto shadow-md sm:rounded-lg bg-white p-4">
-        @if (session('error'))
-            <div>
-                {{ session('error') }}
-            </div>
-        @else
-            <div>
-                {{ session('success') }}
-            </div>
-        @endif
+       <x-message-errors/>
             <div class="flex items-center justify-center flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
                 <h3 class="text-3xl mt-2 uppercase font-bold dark:text-white">kardex de movimientos</h3>
             </div>

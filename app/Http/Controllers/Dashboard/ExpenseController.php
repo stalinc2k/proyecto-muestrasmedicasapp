@@ -8,6 +8,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Visitor;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -165,10 +166,17 @@ class ExpenseController extends Controller
         $this->authorize('delete', $expense);
         $page = $request->input('page', 1);
 
-        $expense->delete();
+        try{
+            $expense->delete();
+             return redirect()
+            ->route('expense.index',['page' => $page])
+            ->with('success', 'Salida eliminada correctamente.');
+        }
+        catch(QueryException $e){
+            return redirect()
+            ->route('expense.index',['page' => $page])
+            ->with('warning', 'La Salida no se puede eliminar, existen transacciones con este Salida.');
+        }
 
-        return redirect()
-            ->route('expense.index', ['page' => $page])
-            ->with('success', 'Salida Eliminada.');
     }
 }

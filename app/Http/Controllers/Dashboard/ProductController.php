@@ -8,6 +8,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -172,9 +173,16 @@ class ProductController extends Controller
     {
         $this->authorize('delete', $product);
         $page = $request->input('page',1);
-        $product->delete();
-        return redirect()
-        ->route('product.index',['page' => $page])
-        ->with('success', 'Producto eliminada correctamente.');
+        try{
+            $product->delete();
+             return redirect()
+            ->route('product.index',['page' => $page])
+            ->with('success', 'Producto eliminada correctamente.');
+        }
+        catch(QueryException $e){
+            return redirect()
+            ->route('product.index',['page' => $page])
+            ->with('warning', 'El producto no se puede eliminar, existen transacciones con este producto.');
+        }
     }
 }

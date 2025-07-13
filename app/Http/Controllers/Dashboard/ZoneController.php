@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Visitor;
 use App\Models\Zone;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -150,9 +151,18 @@ class ZoneController extends Controller
     {
         $this->authorize('delete', $zone);
         $page = $request->input('page', 1);
-        $zone->delete();
-        return redirect()
+        
+        try{
+           $zone->delete();
+            return redirect()
             ->route('zone.index', ['page' => $page])
             ->with('success', 'Zona eliminada correctamente.');
+        }
+        catch(QueryException $e){
+            return redirect()
+            ->route('zone.index',['page' => $page])
+            ->with('warning', 'La zona no se puede eliminar, existen transacciones con este zona.');
+        }
+       
     }
 }

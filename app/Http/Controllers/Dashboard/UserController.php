@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -161,11 +162,17 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $this->authorize('delete', $user);
-        $user->delete();
-
-        return redirect()
-            ->route('user.index')
+       
+        
+        try{
+            $user->delete();
+            return redirect()
             ->with('success', 'Usuario Eliminado.');
+        }
+        catch(QueryException $e){
+            return redirect()
+            ->with('warning', 'El Usuario no se puede eliminar, existen transacciones con este Usuario.');
+        }
 
     }
 }

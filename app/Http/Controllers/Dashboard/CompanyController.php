@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -148,10 +149,17 @@ class CompanyController extends Controller
         $this->authorize('delete', $company);
         $page = $request->input('page', 1);
 
-        $company->delete();
+        try{
+            $company->delete();
+             return redirect()
+            ->route('company.index',['page' => $page])
+            ->with('success', 'Proveedor eliminado correctamente.');
+        }
+        catch(QueryException $e){
+            return redirect()
+            ->route('company.index',['page' => $page])
+            ->with('warning', 'El Proveedor no se puede eliminar, existen transacciones con este Proveedor.');
+        }
        
-        return redirect()
-            ->route('company.index', ['page' => $page])
-            ->with('success', 'Empresa eliminada correctamente.');
     }
 }

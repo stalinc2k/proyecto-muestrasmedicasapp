@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Visitor;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -140,9 +141,17 @@ class VisitorController extends Controller
     {
         $this->authorize('delete', $visitor);
         $page = $request->input('page', 1);
-        $visitor->delete();
-        return redirect()
+       
+        try{
+           $visitor->delete();
+            return redirect()
             ->route('visitor.index', ['page' => $page])
-            ->with('success', 'Representante eliminado');
+            ->with('success', 'Representante eliminado correctamente.');
+        }
+        catch(QueryException $e){
+            return redirect()
+            ->route('visitor.index',['page' => $page])
+            ->with('warning', 'El Representante no se puede eliminar, existen transacciones con este Representante.');
+        }
     }
 }

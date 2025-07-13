@@ -9,6 +9,7 @@ use App\Models\Income;
 use App\Models\Inventory;
 use App\Models\Product;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -177,11 +178,28 @@ class IncomeController extends Controller
     {
         $this->authorize('delete', $income);
         $page = $request->input('page', 1);
-
-        $income->delete();
-
-        return redirect()
-            ->route('income.index', ['page' => $page])
-            ->with('success', 'Entrada Eliminada.');
+        $entradas = Inventory::with('income')->where('income_id', $income->id)->get();
+        
+        foreach($entradas as $entrada){
+            $cont = Inventory::whereNotNull('expense_id')
+                    ->where('expense_id', '!=', '')
+                    ->where('product_id', $entrada->product_id)
+                    ->where('batch_id', $entrada->batch_id)
+                    ->get();
+                    
+            if($cont->count() > 0){
+                return redirect()
+                ->route('income.index',['page' => $page])
+                ->with('warning', 'La Entrada no se puede eliminar, existen transacciones con este Entrada.');
+            }
+        }
+       
+        if($cont->count() == 0){
+            $income->delete();
+             return redirect()
+            ->route('income.index',['page' => $page])
+            ->with('success', 'Entrada eliminada correctamente.');
+        }
+        
     }
 }

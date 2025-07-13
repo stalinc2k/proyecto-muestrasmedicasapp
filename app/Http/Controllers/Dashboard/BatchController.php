@@ -7,6 +7,7 @@ use App\Models\Batch;
 use App\Models\Inventory;
 use App\Models\Product;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -153,11 +154,18 @@ class BatchController extends Controller
     {
         $this->authorize('delete', $batch);
         $page = $request->input('page', 1);
-
-        $batch->delete();
-
-        return redirect()
-            ->route('batch.index', ['page' => $page])
-            ->with('success', 'Lote Eliminada.');
+        
+        try{
+            $batch->delete();
+             return redirect()
+            ->route('batch.index',['page' => $page])
+            ->with('success', 'Lote eliminado correctamente.');
+        }
+        catch(QueryException $e){
+            return redirect()
+            ->route('batch.index',['page' => $page])
+            ->with('warning', 'El Lote no se puede eliminar, existen transacciones con este Lote.');
+        }
+     
     }
 }
