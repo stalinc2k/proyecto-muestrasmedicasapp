@@ -167,10 +167,12 @@ class UserController extends Controller
         try{
             $user->delete();
             return redirect()
+            ->route('user.index')
             ->with('success', 'Usuario Eliminado.');
         }
         catch(QueryException $e){
             return redirect()
+            ->route('user.index')
             ->with('warning', 'El Usuario no se puede eliminar, existen transacciones con este Usuario.');
         }
 

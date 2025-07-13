@@ -47,7 +47,7 @@ class ExpenseController extends Controller
      */
     public function create()
     {
-        $visitors = Visitor::orderBy('code', 'asc')->get();
+        $visitors = Visitor::where('active', true)->orderBy('code', 'asc')->get();
         $products = Product::orderBy('code', 'asc')->get();
 
         //BUSCAR STOCKS
