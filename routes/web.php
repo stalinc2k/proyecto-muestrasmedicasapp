@@ -56,6 +56,7 @@ Route::get('/productos/{company}', [IncomeController::class, 'getProducts'])->mi
 Route::get('/inventories/stock/{product}', [InventoryController::class, 'getStock'])->middleware('auth');
 Route::post('/expense', [ExpenseController::class, 'store'])->middleware('auth');
 Route::get('/listbatch', [BatchController::class, 'batchPdf'])->name('listado.lotes')->middleware('auth');
+Route::get('/stockgeneral', [InventoryController::class, 'stockgeneral'])->name('listado.stock')->middleware('auth');
 
 
 

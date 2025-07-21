@@ -123,8 +123,7 @@ class BatchController extends Controller
         $validator = Validator::make($request->all(), [
             'code' => 'required|min:5',
             'initlot' => 'required|date',
-            'finishlot' => 'date|required|after:today',
-            'product_id' => 'required|integer'
+            'finishlot' => 'date|required',
         ]);
     
         if ($validator->fails()) {
@@ -139,7 +138,6 @@ class BatchController extends Controller
             'code' => strtoupper($request->code),
             'initlot' => $request->initlot,
             'finishlot' => $request->finishlot,
-            'product_id' => intval($request->product_id),
             ]);
     
         return redirect()

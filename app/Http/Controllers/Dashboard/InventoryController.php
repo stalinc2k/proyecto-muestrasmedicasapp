@@ -9,6 +9,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InventoryController extends Controller
 {
@@ -29,8 +30,6 @@ class InventoryController extends Controller
                     ->orWhere('code', 'like', "%{$buscar}%");
             });
         }
-
-
 
         $inventories = $query->paginate(7);
         return view('inventories.index', compact('inventories'));
@@ -54,9 +53,22 @@ class InventoryController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function stockgeneral()
     {
-        //
+        $stocks = Inventory::with(['product', 'batch'])
+            ->select(
+                'product_id',
+                'batch_id',
+                DB::raw("SUM(CASE WHEN income_id IS NOT NULL THEN cantinventory ELSE 0 END) as entradas"),
+                DB::raw("SUM(CASE WHEN expense_id IS NOT NULL THEN cantinventory ELSE 0 END) as salidas"),
+                DB::raw("SUM(CASE WHEN income_id IS NOT NULL THEN cantinventory ELSE 0 END) - 
+                     SUM(CASE WHEN expense_id IS NOT NULL THEN cantinventory ELSE 0 END) as stock")
+            )
+            ->groupBy('product_id', 'batch_id')
+            ->havingRaw('stock > 0')
+            ->get();
+
+        return view('inventories.stock', compact('stocks'));
     }
 
     /**

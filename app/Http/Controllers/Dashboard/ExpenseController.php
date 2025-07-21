@@ -175,7 +175,7 @@ class ExpenseController extends Controller
         catch(QueryException $e){
             return redirect()
             ->route('expense.index',['page' => $page])
-            ->with('warning', 'La Salida no se puede eliminar, existen transacciones con este Salida.');
+            ->with('warning', 'La Salida no se puede eliminar, existen transacciones con esta Salida.');
         }
 
     }

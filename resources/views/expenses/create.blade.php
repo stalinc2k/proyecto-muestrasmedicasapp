@@ -5,7 +5,7 @@
         <div class="bg-white w-1/2 p-4 rounded-2xl">
             <h3 class="text-1xl text-center m-2 uppercase font-bold dark:text-white">datos salida</h3>
             <div>
-                <h3>REPRESENTANTE DE VENTA</h3>
+                <h3>* REPRESENTANTE DE VENTA</h3>
                 <select
                     class="block w-full p-2 mt-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     name="visitor_id" id="visitor_id" onchange="bloquearVisitador()" required>
@@ -15,7 +15,7 @@
                     @endforeach
                 </select>
                 <div class="mt-2">
-                    <h3>FECHA SALIDA</h3>
+                    <h3>* FECHA SALIDA</h3>
                     <input type="date" id="expensedate" name="expensedate" value="{{ now()->toDateString() }}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
@@ -23,7 +23,7 @@
             <div>
 
                 <hr class="my-2">
-                <h3>STOCK DISPONIBLE</h3>
+                <h3>* STOCK DISPONIBLE</h3>
                 <div class="w-full">
 
                     <div class="bg-white dark:bg-gray-900">

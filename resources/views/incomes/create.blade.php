@@ -18,12 +18,12 @@
         <div class="bg-white w-1/2 p-4 rounded-2xl">
             <h3 class="text-1xl text-center m-2 uppercase font-bold dark:text-white">datos entrada</h3>
             <div class="mt-2">
-                <h3>FECHA ENTRADA</h3>
+                <h3>* FECHA ENTRADA</h3>
                 <input type="date" id="incomedate" name="incomedate" value="{{ now()->toDateString() }}"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
             <div class="mt-4">
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white uppercase">Proveedor</label>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white uppercase">* Proveedor</label>
                 <select
                     class="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     id="company_id" name="company_select">
@@ -36,7 +36,7 @@
             </div>
 
             <div>
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white uppercase">Producto</label>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white uppercase">* Producto</label>
                 <select
                     class="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     id="producto" name="product_select">
@@ -46,23 +46,23 @@
 
             <div class="flex justify-between">
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cantidad</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">* Cantidad</label>
                     <input type="number" id="cantinventory" name="cantinventory_input" min="1" value="1"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Lote</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">* Lote</label>
                     <input type="text" id="codelot" name="codelot" value="{{ old('codelot') }}"
                         placeholder="Numero Lote"
                         class=" uppercase bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fabricación</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">* Fabricación</label>
                     <input type="date" id="initlot" name="initlot" value="{{ old('initlot') }}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vencimiento</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">* Vencimiento</label>
                     <input type="date" id="finishlot" name="finishlot" value="{{ old('finishlot') }}"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>

@@ -14,7 +14,7 @@
                 @csrf
                     <div class="col-span-2 mt-2">
                         <label for="name"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombres</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">* Nombres</label>
                         <input type="text" id="name" name="name" value="{{ old('name') }}"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -22,7 +22,7 @@
                     </div>
                     <div class="col-span-2 mt-2">
                         <label for="lastname"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellidos</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">* Apellidos</label>
                         <input type="text" id="lastname" name="lastname" value="{{ old('lastname') }}"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -31,7 +31,7 @@
 
                     <div class="col-span-2 mt-2">
                         <label for="email"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">* Correo</label>
                         <input type="email" id="email" name="email" value="{{ old('email') }}"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -40,7 +40,7 @@
 
                     <div class="col-span-2 mt-2">
                         <label for="password"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">* Contraseña</label>
                         <input type="password" id="password" name="password" value="{{ old('password') }}" autocomplete="new-password"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -48,7 +48,7 @@
                     </div>
                     <div class="col-span-2 mt-2">
                         <label for="password_confirmation"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirmar ontraseña</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">* Confirmar ontraseña</label>
                         <input type="password" id="password_confirmation" name="password_confirmation" value="{{ old('password_confirmation') }}" autocomplete="new-password"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
                                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

@@ -190,7 +190,7 @@ class IncomeController extends Controller
             if($cont->count() > 0){
                 return redirect()
                 ->route('income.index',['page' => $page])
-                ->with('warning', 'La Entrada no se puede eliminar, existen transacciones con este Entrada.');
+                ->with('warning', 'La Entrada no se puede eliminar, existen transacciones con esta Entrada.');
             }
         }
        
