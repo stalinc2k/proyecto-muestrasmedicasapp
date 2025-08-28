@@ -212,6 +212,26 @@
                 return;
             }
 
+            // Convertimos las fechas a objetos Date
+            const fechaHoy = new Date();
+            fechaHoy.setHours(0, 0, 0, 0); // Limpiamos hora para comparar solo fechas
+
+            const fechaElaboracion = new Date(initlot.value);
+            const fechaVencimiento = new Date(finishlot.value);
+
+            // Validamos que la fecha de elaboración no sea futura
+            if (fechaElaboracion > fechaHoy) {
+                alert('La fecha de elaboración no puede ser mayor a la fecha actual');
+                initlot.focus();
+                return;
+            }
+
+            // Validamos que la fecha de vencimiento no sea pasada
+            if (fechaVencimiento < fechaHoy) {
+                alert('La fecha de vencimiento no puede ser menor a la fecha actual');
+                finishlot.focus();
+                return;
+            }
             // CREACION DE LOS CAMPOS EN LA TABLA tablaProductos
 
             const tablaProductos = document.querySelector('#tablaProductos tbody');

@@ -45,7 +45,7 @@ class BatchPolicy
      */
     public function delete(User $user, Batch $batch): bool
     {
-        return $user->role === 'admin';
+        return $user->role === 'super';
     }
 
     /**
