@@ -28,11 +28,30 @@ class BatchController extends Controller
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
+       
+
+        $query = Batch::with(['user','product']);
+
+        if ($request->filled('buscar')){
+            $buscar = $request->buscar;
+            $query->where('code', 'like', "%{$buscar}%")
+            ->orWhereHas('user', function ($q) use ($buscar) {
+                $q->where('name', 'like', "%{$buscar}%")
+                    ->orWhere('lastname', 'like', "%{$buscar}%");
+            })
+            ->orWhereHas('product', function ($q) use ($buscar) {
+                $q->where('code', 'like', "%{$buscar}%")
+                    ->orWhere('description', 'like', "%{$buscar}%")
+                    ->orWhere('barcode', 'like', "%{$buscar}%");
+            });
+        }
+
         $products = Product::orderBy('code','asc')->get();
-        $batches = Batch::orderBy('code', 'asc')->paginate(7);
+        $batches = $query->paginate(7);
         return view('dashboard.batches.index', compact('batches', 'products'));
+
     }
 
     public function stockLotes(){

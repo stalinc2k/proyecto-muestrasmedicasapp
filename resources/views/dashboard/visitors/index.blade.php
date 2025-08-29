@@ -58,7 +58,6 @@
                             @else
                                 <span class="text-sm font-medium text-green-500 dark:text-gray-300">Activo</span>
                             @endif
-
                         </td>
                         <td class="px-6 py-4">
                             {{ $visitor->user->name }} {{ $visitor->user->lastname }}

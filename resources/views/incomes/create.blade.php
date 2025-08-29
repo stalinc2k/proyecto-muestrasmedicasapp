@@ -166,50 +166,81 @@
             const initlot = document.getElementById('initlot');
             const finishlot = document.getElementById('finishlot');
             const totalUnidades = document.querySelector('#totalUnidades');
+
+            let errores = 0
             
-            const unidades = parseInt(totalUnidades.textContent) + parseInt(cant.value);
-            totalUnidades.textContent = unidades;
+            
            
             if (cant.value < 1 || isNaN(cant.value)) {
                 alert('La cantidad debe ser mayor a 0');
                 cant.focus();
+                errores = 1
                 return;
+            }else {
+                errores = 0
             }
 
             if (isNaN(idCompany.value) || !idCompany.value) {
                 alert('No ha seleccionado un proveedor');
                 idCompany.focus();
+                errores = 1
                 return;
+            }else {
+                errores = 0
             }
 
             if (isNaN(idproduct.value) || !idproduct.value) {
                 alert('No ha seleccionado un producto');
                 idproduct.focus();
+                errores = 1
                 return;
+            }else {
+                errores = 0
             }
 
             if (!date.value) {
                 alert('No ha seleccionado una fecha');
                 date.focus();
+                errores = 1
                 return;
+            }else {
+                errores = 0
             }
 
             if (!codelot.value) {
                 alert('Ingrese el lote');
                 codelot.focus();
+                errores = 1
                 return;
+            }else {
+                errores = 0
+            }
+
+            if (codelot.value.length < 5) {
+                alert('El lote debe tener al menos 5 caracteres');
+                codelot.focus();
+                errores = 1
+                return;
+            }else {
+                errores = 0
             }
 
             if (!initlot.value) {
                 alert('Ingrese fecha elaboración');
                 initlot.focus();
+                errores = 1
                 return;
+            }else {
+                errores = 0
             }
 
             if (!finishlot.value) {
                 alert('Ingrese fecha vencimiento');
                 finishlot.focus();
+                errores = 1
                 return;
+            }else {
+                errores = 0
             }
 
             // Convertimos las fechas a objetos Date
@@ -223,43 +254,55 @@
             if (fechaElaboracion > fechaHoy) {
                 alert('La fecha de elaboración no puede ser mayor a la fecha actual');
                 initlot.focus();
+                errores = 1
                 return;
+            }else {
+                errores = 0
             }
 
             // Validamos que la fecha de vencimiento no sea pasada
             if (fechaVencimiento < fechaHoy) {
                 alert('La fecha de vencimiento no puede ser menor a la fecha actual');
                 finishlot.focus();
+                errores += 1
                 return;
             }
+            else {
+                errores = 0
+            }
+
             // CREACION DE LOS CAMPOS EN LA TABLA tablaProductos
+            if(errores == 0){
+                const unidades = parseInt(totalUnidades.textContent) + parseInt(cant.value);
+                totalUnidades.textContent = unidades;
+                const tablaProductos = document.querySelector('#tablaProductos tbody');
+                const filas = tablaProductos.insertRow();
 
-            const tablaProductos = document.querySelector('#tablaProductos tbody');
-            const filas = tablaProductos.insertRow();
+                filas.classList.add('w-full', 'text-left', 'bg-white', 'text-gray-500', 'dark:text-gray-400', 'border-b-2');
+                const celdaIdProd = filas.insertCell(0);
+                celdaIdProd.classList.add('p-3');
+                const celdaDescProd = filas.insertCell(1);
+                celdaDescProd.classList.add('p-3');
+                const celdaLot = filas.insertCell(2);
+                celdaLot.classList.add('p-3');
+                const celdaCant = filas.insertCell(3);
+                celdaCant.classList.add('p-3');
+                const celdaInitLot = filas.insertCell(4);
+                celdaInitLot.classList.add('p-3');
+                const celdafinishLot = filas.insertCell(5);
+                celdafinishLot.classList.add('p-3');
+                const eliminar = filas.insertCell(6);
+                eliminar.classList.add('p-3');
 
-            filas.classList.add('w-full', 'text-left', 'bg-white', 'text-gray-500', 'dark:text-gray-400', 'border-b-2');
-            const celdaIdProd = filas.insertCell(0);
-            celdaIdProd.classList.add('p-3');
-            const celdaDescProd = filas.insertCell(1);
-            celdaDescProd.classList.add('p-3');
-            const celdaLot = filas.insertCell(2);
-            celdaLot.classList.add('p-3');
-            const celdaCant = filas.insertCell(3);
-            celdaCant.classList.add('p-3');
-            const celdaInitLot = filas.insertCell(4);
-            celdaInitLot.classList.add('p-3');
-            const celdafinishLot = filas.insertCell(5);
-            celdafinishLot.classList.add('p-3');
-            const eliminar = filas.insertCell(6);
-            eliminar.classList.add('p-3');
-
-            celdaIdProd.textContent = idproduct.value;
-            celdaDescProd.textContent = idproduct.options[idproduct.selectedIndex].text;
-            celdaLot.textContent = codelot.value;
-            celdaCant.textContent = cant.value;
-            celdaInitLot.textContent = initlot.value;
-            celdafinishLot.textContent = finishlot.value;
-            eliminar.innerHTML = `<button class="btn-eliminar">Eliminar</button>`;
+                celdaIdProd.textContent = idproduct.value;
+                celdaDescProd.textContent = idproduct.options[idproduct.selectedIndex].text;
+                celdaLot.textContent = codelot.value;
+                celdaCant.textContent = cant.value;
+                celdaInitLot.textContent = initlot.value;
+                celdafinishLot.textContent = finishlot.value;
+                eliminar.innerHTML = `<button class="btn-eliminar">Eliminar</button>`;
+            }
+            
         }
 
         document.querySelector('#tablaProductos').addEventListener('click', function(event) {

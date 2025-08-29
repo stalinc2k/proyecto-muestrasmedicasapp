@@ -28,6 +28,7 @@ class CompanyController extends Controller
             ->orWhere('name', 'like', "%{$buscar}%")
             ->orWhere('ruc', 'like', "%{$buscar}%")
             ->orWhere('address', 'like', "%{$buscar}%")
+            ->orWhere('phone', 'like', "%{$buscar}%")
             ->orWhereHas('user', function ($q) use ($buscar) {
                 $q->where('name', 'like', "%{$buscar}%")
                     ->orWhere('lastname', 'like', "%{$buscar}%");

@@ -68,4 +68,5 @@
         </table>
     </div>
     @include('incomes.script')
+    <x-incomecomponents.errormodal-open-income />
 @endsection

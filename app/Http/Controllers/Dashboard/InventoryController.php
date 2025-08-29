@@ -20,7 +20,7 @@ class InventoryController extends Controller
     use AuthorizesRequests;
     public function index(Request $request)
     {
-        $query = Inventory::with(['user', 'product']);
+        $query = Inventory::with(['user', 'product','batch']);
 
         if ($request->filled('buscar')){
             $buscar = $request->buscar;
@@ -28,6 +28,9 @@ class InventoryController extends Controller
             ->orWhereHas('product', function ($q) use ($buscar) {
                 $q->where('description', 'like', "%{$buscar}%")
                     ->orWhere('code', 'like', "%{$buscar}%");
+            })
+            ->orWhereHas('batch', function ($q) use ($buscar) {
+                $q->where('code', 'like', "%{$buscar}%");
             });
         }
 

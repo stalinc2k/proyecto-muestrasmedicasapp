@@ -33,6 +33,10 @@ class ExpenseController extends Controller
             ->orWhereHas('visitor', function ($q) use ($buscar) {
                 $q->where('name', 'like', "%{$buscar}%")
                     ->orWhere('code', 'like', "%{$buscar}%");
+            })
+            ->orWhereHas('user', function ($q) use ($buscar) {
+                $q->where('name', 'like', "%{$buscar}%")
+                    ->orWhere('lastname', 'like', "%{$buscar}%");
             });
         }
 

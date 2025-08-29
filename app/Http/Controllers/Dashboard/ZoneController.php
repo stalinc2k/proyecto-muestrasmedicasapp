@@ -33,7 +33,8 @@ class ZoneController extends Controller
             $query->where('code', 'like', "%{$buscar}%")
                 ->orWhere('name', 'like', "%{$buscar}%")
                 ->orWhereHas('visitor', function ($q) use ($buscar) {
-                    $q->where('name', 'like', "%{$buscar}%");
+                    $q->where('name', 'like', "%{$buscar}%")
+                    ->orWhere('code', 'like', "%{$buscar}%");
                 })
                 ->orWhereHas('user', function ($q) use ($buscar) {
                     $q->where('name', 'like', "%{$buscar}%")

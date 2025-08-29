@@ -29,7 +29,7 @@ class IncomeController extends Controller
 
         if ($request->filled('buscar')){
             $buscar = $request->buscar;
-            $query->where('id', 'like', "%{$buscar}%")
+            $query->where('id', 'like', "{$buscar}")
             ->orWhereDate('entrydate', 'like', "%{$buscar}%")
             ->orWhereHas('company', function ($q) use ($buscar) {
                 $q->where('name', 'like', "%{$buscar}%")

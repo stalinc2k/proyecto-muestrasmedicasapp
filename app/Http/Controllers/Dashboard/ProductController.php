@@ -23,7 +23,7 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $query = Product::with(['user']);
+        $query = Product::with(['user','company']);
 
         if ($request->filled('buscar')){
             $buscar = $request->buscar;
@@ -33,6 +33,11 @@ class ProductController extends Controller
             ->orWhereHas('user', function ($q) use ($buscar) {
                 $q->where('name', 'like', "%{$buscar}%")
                     ->orWhere('lastname', 'like', "%{$buscar}%");
+            })
+            ->orWhereHas('company', function ($q) use ($buscar) {
+                $q->where('name', 'like', "%{$buscar}%")
+                    ->orWhere('ruc', 'like', "%{$buscar}%")
+                    ->orWhere('code', 'like', "%{$buscar}%");
             });
         }
 

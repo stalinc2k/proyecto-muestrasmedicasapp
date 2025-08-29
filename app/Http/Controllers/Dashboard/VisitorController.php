@@ -18,7 +18,7 @@ class VisitorController extends Controller
 
     public function index(Request $request)
     {
-        $query = Visitor::with(['user']);
+        $query = Visitor::with(['user','zone']);
 
         if ($request->filled('buscar')){
             $buscar = $request->buscar;
@@ -27,6 +27,10 @@ class VisitorController extends Controller
             ->orWhereHas('user', function ($q) use ($buscar) {
                 $q->where('name', 'like', "%{$buscar}%")
                     ->orWhere('lastname', 'like', "%{$buscar}%");
+            })
+            ->orWhereHas('zone', function ($q) use ($buscar) {
+                $q->where('code', 'like', "%{$buscar}%")
+                    ->orWhere('name', 'like', "%{$buscar}%");
             });
         }
 
